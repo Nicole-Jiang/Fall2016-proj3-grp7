@@ -4,9 +4,9 @@
 
 Term: Fall 2016
 
-+ Team #
++ Team #7
 + Team members
-	+ team member 1
+	+ team member 1 Jing Mu (jm4269)
 	+ team member 2
 	+ team member 3
 	+ team member 4
