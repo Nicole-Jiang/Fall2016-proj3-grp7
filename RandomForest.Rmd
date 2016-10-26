@@ -50,14 +50,15 @@ rf.form <- as.formula(paste("filelabel", varNames1, sep = " ~ "))
 Random Forest business starts.
 ```{r}
 library(randomForest)
-rf=randomForest(rf.form,train_data,ntree=500,importance=T)
+rf=randomForest(rf.form,train_data,ntree=500,importance=T) # It really took tens of minutes
 plot(rf)
 ```
-500 decision trees or a forest has been built using the Random Forest algorithm based learning. We can plot the error rate across decision trees. Black solid line is OOB error rate and a bunch of colour lines, one for each class' error
-*OOB is the mean prediction error on each training sample x???, using only the trees that did not have x??? in their bootstrap sample. The plot seems to indicate that after 300 decision trees, there is not a significant reduction in error rate.
+500 decision trees or a forest has been built using the Random Forest algorithm based learning. We can plot the error rate across decision trees. Black solid line is OOB error rate and colour lines for each class' error. The plot seems to indicate that after 300 decision trees, there is not a significant reduction in error rate.
+
+*OOB is the mean prediction error on each training sample xi, using only the trees that did not have xi in their bootstrap sample. 
 
 
-Predict
+Prediction perforamace for training data
 ```{r}
 # Predicting response variable
 train_data$predicted.response <- predict(rf ,train_data)
@@ -69,7 +70,7 @@ library(caret)
 confusionMatrix(data=train_data$predicted.response,reference=train_data$filelabel,positive='1')
 ```
 
-Predict for validation sample
+Predict for testing data
 ```{r}
 # Predicting response variable
 test_data$predicted.response <- predict(rf,test_data)
