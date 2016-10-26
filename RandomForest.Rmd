@@ -1,0 +1,86 @@
+---
+title: "Random Forest"
+output: html_notebook
+---
+I am using data preprocessing code directly from decision_tree.R
+```{r}
+# code from decision_tree.R
+
+library(data.table)
+sift= fread("sift_features.csv", header= F)
+labels <- dir("images")
+filelabel= as.numeric(substr(labels, 1,1) == "c")
+labels= substr(labels,1,nchar(labels)-4)
+labels.df = data.frame(filename= labels, filelabel= filelabel)
+
+sift.df= as.data.frame(t(sift))
+colnames(sift.df)[1] <- "filename"
+
+data.all= merge(sift.df,labels.df, by= names(sift.df)[1])[,-1]
+data.all = as.data.frame(apply(data.all,2, as.numeric))
+data.all$filelabel = as.factor(data.all$filelabel)
+#############################################################
+
+# Split data into testing and training using 
+set.seed(2)
+train=sample(1:nrow(data.all),nrow(data.all)*0.8)
+test=-train
+train_data=data.all[train,]
+test_data=data.all[test,]
+test_label=filelabel[test]
+```
+
+Just use variables in dicision_tree.R
+train_data
+test_data
+
+```{r}
+library(randomForest)
+### Make formula
+varNames <- names(train_data)
+# Exclude ID or Response variable
+varNames <- varNames[!varNames %in% c("filelabel")]
+# add + sign between exploratory variables
+varNames1 <- paste(varNames, collapse = "+")
+# Add response variable and convert to a formula object
+rf.form <- as.formula(paste("filelabel", varNames1, sep = " ~ "))
+```
+
+
+Random Forest business starts.
+```{r}
+library(randomForest)
+rf=randomForest(rf.form,train_data,ntree=500,importance=T)
+plot(rf)
+```
+500 decision trees or a forest has been built using the Random Forest algorithm based learning. We can plot the error rate across decision trees. Black solid line is OOB error rate and a bunch of colour lines, one for each class' error
+*OOB is the mean prediction error on each training sample x???, using only the trees that did not have x??? in their bootstrap sample. The plot seems to indicate that after 300 decision trees, there is not a significant reduction in error rate.
+
+
+Predict
+```{r}
+# Predicting response variable
+train_data$predicted.response <- predict(rf ,train_data)
+
+# Load Library or packages
+library(e1071)
+library(caret)
+# Create Confusion Matrix
+confusionMatrix(data=train_data$predicted.response,reference=train_data$filelabel,positive='1')
+```
+
+Predict for validation sample
+```{r}
+# Predicting response variable
+test_data$predicted.response <- predict(rf,test_data)
+
+# Create Confusion Matrix
+confusionMatrix(data=test_data$predicted.response,
+                reference=test_data$filelabel,
+                positive='1') # prediction accuracy rate is 62.75%
+
+```
+
+
+
+
