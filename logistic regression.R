@@ -28,7 +28,7 @@ glm.log = glm(filelabel ~ ., family=binomial("logit"), data=data.train)
 #############################################################
 ###  logistic regression  ###
 sample= sample(nrow(data.all),0.8*nrow(data.all))
-sample.col= sample(5000,200)
+sample.col= sample(5000,1000)
 data.train= data.all[sample,c(sample.col,5001)]
 data.test=data.all[-sample,c(sample.col,5001)]
 glm.log = glm(filelabel ~ .,family="binomial", data=data.train)
@@ -36,13 +36,22 @@ glm.log.pred= predict(glm.log,newdata = data.test,type = "response")
 glm.log.pred= as.numeric(glm.log.pred > 0.5)
 mean(data.test$filelabel==glm.log.pred)
 ##############################################################
-##  boost adaboost stump
+##  boost adaboost stump ##
 library(ada)
 ada.fit= ada(filelabel~.,data=data.train,iter=20,nu=1,type="discrete")
 ada.predict <- predict(ada.fit,newdata=data.test,type="vector")
-mean(data.test$filelabel==ada.predict)  # 0.595
+mean(data.test$filelabel==ada.predict)  # 0.65
 
+##############################################################
+library(gbm) 
+#n.tree= 1000: 0.63; ntree=100:0.52; n.tree= 2000:0.61
 
+gbm.fit <- gbm(filelabel~., data = data.train, distribution = "gaussian", n.tree= 1000, 
+               shrinkage = 0.001)
+gbm.predict <- predict(gbm.fit, newdata=data.test, n.trees= 100)
+#gbm.predict = (gbm.predict-min(gbm.predict))/(max(gbm.predict)-min(gbm.predict))
+gbm.predict=as.numeric(gbm.predict > mean(gbm.predict)) 
+mean(data.test$filelabel==gbm.predict) 
 
 
 
