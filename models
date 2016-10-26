@@ -1,0 +1,100 @@
+setwd("~/Desktop/ADS/Proj3-grp7")
+library(data.table)
+#source("http://bioconductor.org/biocLite.R")
+#biocLite("EBImage")
+library(EBImage)
+library(dplyr)
+library(xgboost)
+library(MASS)
+library(gbm)
+library(tree)
+library(e1071)
+sift= fread("sift_features.csv", header= F)
+labels <- dir("images")
+filelabel= as.numeric(substr(labels, 1,1) == "c")
+labels= substr(labels,1,nchar(labels)-4)
+labels.df = data.frame(filename= labels, filelabel= filelabel)
+
+sift.df= as.data.frame(t(sift))
+colnames(sift.df)[1] <- "filename"
+
+data.all= merge(sift.df,labels.df, by= names(sift.df)[1])[,-1]
+data.all = as.data.frame(apply(data.all,2, as.numeric))
+data.all$filelabel = as.factor(data.all$filelabel)
+#############################################################
+###  logistic regression  ###
+sample= sample(nrow(data.all),0.8*nrow(data.all))
+data.train= data.all[sample,]
+data.test= data.all[-sample,]
+#glm.log = glm(filelabel ~ ., family=binomial("logit"), data=data.train)
+#############################################################
+###  logistic regression  ###
+#sample= sample(nrow(data.all),0.8*nrow(data.all))
+sample.col= sample(5000,1000)
+#data.train= data.all[sample,c(sample.col,5001)]
+#data.test=data.all[-sample,c(sample.col,5001)]
+#glm.log = glm(filelabel ~ .,family="binomial", data=data.train)
+#glm.log.pred= predict(glm.log,newdata = data.test,type = "response")
+#glm.log.pred= as.numeric(glm.log.pred > 0.5)
+#mean(data.test$filelabel==glm.log.pred)
+
+##############################################################
+##  boost adaboost stump ##
+library(ada)
+ada.fit= ada(filelabel~.,data=data.train,iter=20,nu=1,type="discrete")
+ada.predict <- predict(ada.fit,newdata=data.test,type="vector")
+mean(data.test$filelabel==ada.predict)  # 0.65
+ada.predict.all=predict(ada.fit,newdata=data.all,type="vector")
+
+
+
+##############################################################
+##  gradient boosting method ##
+library(gbm) 
+#n.tree= 1000: 0.63; ntree=100:0.52; n.tree= 2000:0.61
+
+gbm.fit <- gbm(filelabel~., data = data.train, distribution = "gaussian", n.tree= 1000, 
+               shrinkage = 0.001)
+gbm.predict <- predict(gbm.fit, newdata=data.test, n.trees= 100)
+#gbm.predict = (gbm.predict-min(gbm.predict))/(max(gbm.predict)-min(gbm.predict))
+gbm.predict=as.numeric(gbm.predict > mean(gbm.predict)) 
+mean(data.test$filelabel==gbm.predict)
+gbm.predict.all=predict(gbm.fit,newdata=data.all,n.trees=100)
+gbm.predict.all=as.numeric(gbm.predict.all > mean(gbm.predict.all)) 
+
+
+##############################################################
+## decision tree  ##
+# fit the tree model using training data
+tree_model=tree(filelabel~.,data=data.train)
+plot(tree_model)
+text(tree_model,pretty=0)
+tree_pred=predict(tree_model,data.test,type="class")
+mean(data.test$filelabel==tree_pred) #0.645
+tree.predict.all=predict(tree_model,data.all,type="class")
+
+
+###############################################################
+## support vector machine ##
+dat_train= data.all[sample]
+dat_test= data.all[-sample]
+lab_train=data.all[sample,5001]
+lab_test=data.all[-sample,5001]
+
+svm.fit=svm(x=dat_train,y=lab_train,kernel="radial",scale = F)
+svm.pred= predict(base.svm,newdata = dat_test)
+mean(lab_test==svm.pred)
+svm.predict.all=predict(svm.fit,newdata=data.all[,1:5000])
+#########################################################
+
+ada.predict.all=as.numeric(as.character(ada.predict.all))
+gbm.predict.all=as.numeric(as.character(gbm.predict.all))
+tree.predict.all=as.numeric(as.character(tree.predict.all))
+svm.predict.all=as.numeric(as.character(svm.predict.all))
+
+result=cbind(ada.predict.all,gbm.predict.all,tree.predict.all,svm.predict.all)
+class(result)
+colnames(result)=c("ada","gbm","tree","svm")
+result=as.data.frame(result)
+library(dplyr)
+result=mutate(result,avg=(ada+gbm+tree+svm)/4)
