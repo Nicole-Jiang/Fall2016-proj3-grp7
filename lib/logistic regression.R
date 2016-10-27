@@ -53,5 +53,15 @@ gbm.predict <- predict(gbm.fit, newdata=data.test, n.trees= 100)
 gbm.predict=as.numeric(gbm.predict > mean(gbm.predict)) 
 mean(data.test$filelabel==gbm.predict) 
 
+##############################################################
+library(xgboost)
+xg.fit= xgboost(data= as.matrix(data.train[,-1001]),label= data.train$filelabel, nrounds=2)
+xg.predict <- predict(xg.fit,as.matrix(data.test[,-1001]))
+xg.predict=as.numeric(xg.predict > mean(xg.predict)) 
+mean(data.test$filelabel==xg.predict) 
+
+
+write.csv(data.all, file= "data.csv")
+
 
 
