@@ -2,19 +2,20 @@ library(caretEnsemble)
 library(caret)
 library(rpart)
 library(pROC)
+library(kernlab)
 # create submodels
 data.all$filelabel = factor(data.all$filelabel, labels = c("no", "yes"))
 sample= sample(nrow(data.all),0.8*nrow(data.all))
-#data.train= data.all[sample,]
-#data.test= data.all[-sample,]
-sample.col= sample(5000,1000)
-data.train= data.all[sample,c(sample.col,5001)]
-data.test=data.all[-sample,c(sample.col,5001)]
-control <- trainControl(method="repeatedcv", number=10, repeats=3, savePredictions="final", classProbs=TRUE)
-algorithmList <- c('rpart', 'knn', 'glm')
+data.train= data.all[sample,c(1:200,5001)]
+data.test= data.all[-sample,c(1:200,5001)]
+#sample.col= sample(5000,1000)
+#data.train= data.all[sample,c(sample.col,5001)]
+#data.test=data.all[-sample,c(sample.col,5001)]
+control <- trainControl(method="repeatedcv", number=5, repeats=2, savePredictions="final", classProbs=TRUE)
+algorithmList <- c('rpart', 'knn','svmRadial','rf','lda')
 set.seed(111)
 models <- caretList(filelabel~., data=data.train, trControl=control, methodList=algorithmList) # model_list
-xyplot(resamples(models))
+x1yplot(resamples(models))
 results <- resamples(models)
 summary(results)
 dotplot(results)

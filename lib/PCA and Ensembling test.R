@@ -1,5 +1,16 @@
 ###PCA
+setwd("~/Sem 2/Applied Data Science/Project 3")
 library(data.table)
+library(caretEnsemble)
+library(caret)
+library(rpart)
+library(pROC)
+sift= fread("sift_features.csv", header= F)
+labels <- dir("images")
+filelabel= as.numeric(substr(labels, 1,1) == "c")
+labels= substr(labels,1,nchar(labels)-4)
+labels.df = data.frame(filename= labels, filelabel= filelabel)
+
 Data.pca=as.data.frame(t(fread("sift_features.csv")))
 #test= Data.pca[1:50,1:1000]
 feature_pca= prcomp(Data.pca)
@@ -13,10 +24,10 @@ sample= sample(nrow(scores),0.8*nrow(scores))
 #data.train= data.all[sample,]
 #data.test= data.all[-sample,]
 #sample.col= sample(5000,1000)
-data.train= scores[sample,c(1:500,2001)]
-data.test=scores[-sample,c(1:500,2001)]
+data.train= scores[sample,c(1:1000,2001)]
+data.test=scores[-sample,c(1:1000,2001)]
 control <- trainControl(method="repeatedcv", number=10, repeats=3, savePredictions="final", classProbs=TRUE)
-algorithmList <- c('rpart', 'knn', 'glm')
+algorithmList <- c('rpart', 'knn')  #deleted 'glm'
 models <- caretList(filelabel~., data=data.train, trControl=control, methodList=algorithmList) # model_list
 xyplot(resamples(models))
 results <- resamples(models)
@@ -48,4 +59,4 @@ ens_preds <- predict(greedy_ensemble, newdata=data.test)
 #cc= factor(bb, labels= c("no","yes"))
 #model_preds$ensemble <- ens_preds
 #caTools::colAUC(ens_preds, data.test$filelabel)
-mean(ens_preds== data.test$filelabel)
+mean(ens_preds== data.test$filelabel) # 40.25 Do not use it!!!
