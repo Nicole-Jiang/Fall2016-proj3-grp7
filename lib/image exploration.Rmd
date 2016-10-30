@@ -3,7 +3,7 @@ title: "Image Feature Exploration"
 output: html_notebook
 ---
 
-# I manually picked 12 representatives from each category:
+I manually picked 12 representatives from each category:
 
 chicken_0116
 chicken_0131 (so hard to distinguish)
@@ -32,16 +32,13 @@ dog_0608
 dog_0887
 
 
-Some outliers in the whole dataset exist and may result in prediction errors.
-
-
 Some ideas:
 - Extract surface texture which stands out with curvy grains (? hard to realize)
-- Color RGB feature (success)
+- Color RGB feature (success, 800 of them)
 - Color HSV feature
 
 
-#Here I pick 5 images (3 fried chickens and 2 dogs) to do a image exloration demo.
+Here I pick 5 images (3 fried chickens and 2 dogs) to do an image exloration demo.
 ```{r}
 setwd("~/Google Drive/Columbia/5243 ADS/Project 3/Project3_poodleKFC_train/images")
 
@@ -65,7 +62,7 @@ for (i in 1:5){
 ```
 
 
-Change to Greyscale, blue and red channels
+#Change to Greyscale, blue and red channels
 ```{r}
 file.bw=list()
 file.bl=list()
@@ -88,7 +85,8 @@ for (i in 1:5) {
 ```
 
 
-Extract the texture by high contrast on blue channel, which really shows difference to me between fried chicken and dogs.
+#Extract the texture by high contrast on blue channel, 
+which really shows difference to me between fried chicken and dogs.
 ```{r}
 file.contrast=list()
 for (i in 1:5){
@@ -155,7 +153,7 @@ for (k in 1:5){
 }
 ```
 
-Color Features from RGB
+#Color Features from RGB
 
 By discretizing the RGB values, we can get a set of color features. We subdivide the pixel values in each color channel into multiple bands of equal width. Then the counts of pixels in correponding bins consist of a set of color features that characterizes the color distribution of the image.
 ```{r}
@@ -179,3 +177,37 @@ for (i in 1:5){
 str(rgb_feature) #each image has 800 features
 #The number of bins for each color channel (nR,nG,nB) is a tuning parameter for constructing color features. The total number of features is nR*nG*nB.
 ```
+
+#Color Features From HSV
+
+The Hue, Saturation, Value (HSV) model of color is closer to human perception of color, and thus is eaiser to interpret than RGB model. Using the same discretization, color features can be extracted from the histogram of HSV values.
+```{r}
+library(grDevices)
+
+nH <- 10
+nS <- 6
+nV <- 6
+# Caution: determine the bins using all images! The bins should be consistent across all images. The following code is only used for demonstration on a single image.
+hBin <- seq(0, 1, length.out=nH)
+sBin <- seq(0, 1, length.out=nS)
+vBin <- seq(0, 0.005, length.out=nV) 
+
+# Convert 3d array of RGB to 2d matrix
+
+mat_rgb <- mat
+mat_hsv <- list()
+freq_hsv <- list()
+hsv_feature <- list()
+
+for (i in 1:5){
+  dim(mat_rgb[[i]]) <- c(nrow(mat[[i]])*ncol(mat[[i]]), 3)
+  mat_hsv[[i]] <- rgb2hsv(t(mat_rgb[[i]]))
+
+  freq_hsv[[i]] <- as.data.frame(table(factor(findInterval(mat_hsv[[i]][1,], hBin), levels=1:nH), factor(findInterval(mat_hsv[[i]][2,], sBin), levels=1:nS),  factor(findInterval(mat_hsv[[i]][3,], vBin), levels=1:nV)))
+  
+  hsv_feature[[i]] <- as.numeric(freq_hsv[[i]]$Freq)/(ncol(mat[[i]])*nrow(mat[[i]])) # normalization
+}
+str(hsv_feature) # 360 HSV features
+#The number of bins for each model (nH,nS,nV) is a tuning parameter for constructing color features. The total number of features is nHnSnV.
+```
+
