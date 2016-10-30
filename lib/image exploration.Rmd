@@ -1,0 +1,181 @@
+---
+title: "Image Feature Exploration"
+output: html_notebook
+---
+
+# I manually picked 12 representatives from each category:
+
+chicken_0116
+chicken_0131 (so hard to distinguish)
+chicken_0181
+chicken_0218
+chicken_0264
+chicken_0306
+chicken_0383
+chicken_0761
+chicken_0646
+chicken_0599 (only a leg)
+chicken_0891 (dark color)
+chicken_0999
+
+dog_0010
+dog_0021 (typical hair)
+dog_0023
+dog_0033
+dog_0095
+dog_0146 (only a leg)
+dog_0147
+dog_0342 (smooth surface)
+dog_0404
+dog_0432
+dog_0608
+dog_0887
+
+
+Some outliers in the whole dataset exist and may result in prediction errors.
+
+
+Some ideas:
+- Extract surface texture which stands out with curvy grains (? hard to realize)
+- Color RGB feature (success)
+- Color HSV feature
+
+
+#Here I pick 5 images (3 fried chickens and 2 dogs) to do a image exloration demo.
+```{r}
+setwd("~/Google Drive/Columbia/5243 ADS/Project 3/Project3_poodleKFC_train/images")
+
+library("EBImage")
+i1.c <- readImage("chicken_0116.jpg") #chicken 1
+i2.c <- readImage("chicken_0761.jpg") #chicken 2
+i1.d <- readImage("dog_0021.jpg") #dog 1
+i2.d <- readImage("dog_0608.jpg") #dog 2
+i1 <- readImage("chicken_0131.jpg") # hard-to-distinguish chicken
+
+filename=list(i1.c,i2.c,i1.d,i2.d,i1) #list all 5 images
+
+options("EBImage.display"= "raster") #display in R rather than in browser
+
+print(filename) #detailed info of all 5 images 
+
+for (i in 1:5){
+  display(filename[[i]])   #display images
+  hist(filename[[i]])      #RGB histograms
+}
+```
+
+
+Change to Greyscale, blue and red channels
+```{r}
+file.bw=list()
+file.bl=list()
+file.red=list()
+
+for (i in 1:5){
+  file.bw[[i]]=channel(filename[[i]],mode="grey")
+  display(file.bw[[i]])
+}
+
+for (i in 1:5) {
+  file.bl[[i]]=channel(filename[[i]], mode='asblue')
+  display(channel(filename[[i]], mode='asblue'))
+}
+
+for (i in 1:5) {
+  file.red[[i]]=channel(filename[[i]], mode='asred')
+  display(channel(filename[[i]], mode='asred'))
+}
+```
+
+
+Extract the texture by high contrast on blue channel, which really shows difference to me between fried chicken and dogs.
+```{r}
+file.contrast=list()
+for (i in 1:5){
+  file.contrast=file.bl[[i]]*5
+  display(file.bl[[i]]*5)
+}
+```
+
+#Filtering: high pass
+```{r}
+filter_high <- matrix(1, nc = 3, nr = 3)
+filter_high[2, 2] <- -8
+file.hi=list()
+for (i in 1:5){
+  file.hi <- filter2(filename[[i]], filter_high)
+  display(file.hi)# high pass
+}
+```
+
+#Adaptive thresholding
+```{r}
+for (i in 1:5){
+  file.bw[[i]]=channel(filename[[i]],mode="grey")
+  img_seg1 <- thresh(file.bw[[i]], w=60, h=60, offset=0.06)
+  display(img_seg1, all=TRUE)
+}
+```
+
+
+# Outline Analysis
+```{r}
+#Oriented Contour ### didn't see any use here
+img_leaf=list()
+img_leaf1=list()
+oc=list()
+
+for (i in 1:5){
+  img_leaf[[i]] <- resize(filename[[i]], 128, 128)
+  img_leaf[[i]] <- channel(img_leaf[[i]], mode="gray")
+  img_leaf1[[i]] <- thresh(img_leaf[[i]], w=50, h=50, offset=0.05)
+  display(img_leaf1[[i]])}
+
+for (i in 1:5){
+  oc[[i]] <- ocontour(bwlabel(img_leaf1[[i]]))
+  plot(oc[[i]][[1]], type='l');points(oc[[i]][[1]], col=2)
+}
+```
+
+```{r}
+#Local Curvature
+lc=list()
+i=list()
+neg=list()
+pos=list()
+
+for (k in 1:5){
+  lc[[k]] <- localCurvature(x=oc[[k]][[1]], h=11)
+  i[[k]] <- lc[[k]]$curvature >= 0
+  neg[[k]] <- array(0, dim(img_leaf1[[k]]))
+  pos[[k]] <- neg[[k]]
+  pos[[k]][lc[[k]]$contour[i[[k]],]+1]  <- lc[[k]]$curvature[i[[k]]]
+  neg[[k]][lc[[k]]$contour[!i[[k]],]+1] <- -lc[[k]]$curvature[!i[[k]]]
+  display(10*(rgbImage(pos[[k]], , neg[[k]])), title = "Image curvature")
+}
+```
+
+Color Features from RGB
+
+By discretizing the RGB values, we can get a set of color features. We subdivide the pixel values in each color channel into multiple bands of equal width. Then the counts of pixels in correponding bins consist of a set of color features that characterizes the color distribution of the image.
+```{r}
+mat=list()
+freq_rgb=list()
+rgb_feature=list()
+
+nR <- 10
+nG <- 8
+nB <- 10 # Caution: the bins should be consistent across all images!
+rBin <- seq(0, 1, length.out=nR)
+gBin <- seq(0, 1, length.out=nG)
+bBin <- seq(0, 1, length.out=nB)
+
+for (i in 1:5){
+  mat[[i]] <- imageData(filename[[i]])
+  freq_rgb[[i]] <- as.data.frame(table(factor(findInterval(mat[[i]][,,1], rBin), levels=1:nR), factor(findInterval(mat[[i]][,,2], gBin), levels=1:nG), factor(findInterval(mat[[i]][,,3], bBin), levels=1:nB)))
+  rgb_feature[[i]] <- as.numeric(freq_rgb[[i]]$Freq)/(ncol(mat[[i]])*nrow(mat[[i]])) # normalization
+}
+
+str(rgb_feature) #each image has 800 features
+#The number of bins for each color channel (nR,nG,nB) is a tuning parameter for constructing color features. The total number of features is nR*nG*nB.
+```
