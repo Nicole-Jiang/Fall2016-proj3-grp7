@@ -1,18 +1,22 @@
-library(caretEnsemble)
-library(caret)
-library(rpart)
-library(pROC)
-# create submodels
-data.all$filelabel = factor(data.all$filelabel, labels = c("no", "yes"))
-sample= sample(nrow(data.all),0.8*nrow(data.all))
+###PCA
+library(data.table)
+Data.pca=as.data.frame(t(fread("sift_features.csv")))
+#test= Data.pca[1:50,1:1000]
+feature_pca= prcomp(Data.pca)
+scores= as.data.frame(cbind(feature_pca$x,filelabel))
+names(scores)[2001]= "filelabel"
+dim(feature_pca$x)
+
+
+scores$filelabel = factor(scores$filelabel, labels = c("no", "yes"))
+sample= sample(nrow(scores),0.8*nrow(scores))
 #data.train= data.all[sample,]
 #data.test= data.all[-sample,]
-sample.col= sample(5000,1000)
-data.train= data.all[sample,c(sample.col,5001)]
-data.test=data.all[-sample,c(sample.col,5001)]
+#sample.col= sample(5000,1000)
+data.train= scores[sample,c(1:500,2001)]
+data.test=scores[-sample,c(1:500,2001)]
 control <- trainControl(method="repeatedcv", number=10, repeats=3, savePredictions="final", classProbs=TRUE)
 algorithmList <- c('rpart', 'knn', 'glm')
-set.seed(111)
 models <- caretList(filelabel~., data=data.train, trControl=control, methodList=algorithmList) # model_list
 xyplot(resamples(models))
 results <- resamples(models)
@@ -31,7 +35,7 @@ splom(results)
 greedy_ensemble <- caretEnsemble( models,  metric="ROC", 
                                   trControl=trainControl(number=2,summaryFunction=twoClassSummary,
                                                          classProbs=TRUE
-                                                         ))
+                                  ))
 summary(greedy_ensemble)
 ##############
 ### test set
@@ -45,8 +49,3 @@ ens_preds <- predict(greedy_ensemble, newdata=data.test)
 #model_preds$ensemble <- ens_preds
 #caTools::colAUC(ens_preds, data.test$filelabel)
 mean(ens_preds== data.test$filelabel)
-
-
-CV= vector()
-CV[2]= mean(ens_preds== data.test$filelabel)
-
