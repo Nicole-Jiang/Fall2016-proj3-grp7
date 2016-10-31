@@ -3,6 +3,7 @@ library(caret)
 library(rpart)
 library(pROC)
 library(kernlab)
+library(randomForest)
 # create submodels
 data.all$filelabel = factor(data.all$filelabel, labels = c("no", "yes"))
 sample= sample(nrow(data.all),0.8*nrow(data.all))
@@ -12,7 +13,7 @@ data.test= data.all[-sample,c(1:200,5001)]
 #data.train= data.all[sample,c(sample.col,5001)]
 #data.test=data.all[-sample,c(sample.col,5001)]
 control <- trainControl(method="repeatedcv", number=5, repeats=2, savePredictions="final", classProbs=TRUE)
-algorithmList <- c('rpart', 'knn','svmRadial','rf','lda')
+algorithmList <- c('rpart','rf') #'rpart', 'knn','svmRadial','rf','lda'
 set.seed(111)
 models <- caretList(filelabel~., data=data.train, trControl=control, methodList=algorithmList) # model_list
 x1yplot(resamples(models))
@@ -46,8 +47,4 @@ ens_preds <- predict(greedy_ensemble, newdata=data.test)
 #model_preds$ensemble <- ens_preds
 #caTools::colAUC(ens_preds, data.test$filelabel)
 mean(ens_preds== data.test$filelabel)
-
-
-CV= vector()
-CV[2]= mean(ens_preds== data.test$filelabel)
 
