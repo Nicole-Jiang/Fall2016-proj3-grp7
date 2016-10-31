@@ -69,7 +69,7 @@ for (i in 1:1000){
 rgb_feature=rbind(rgb_chicken,rgb_dog)
 hsv_feature=rbind(hsv_chicken,hsv_dog)
 colnames(rgb_feature) <- paste0("RGB",1:800)
-colnames(hsv_feature) <- paste0("HSV",1:800)
+colnames(hsv_feature) <- paste0("HSV",1:360)
 label <- c(rep(1,1000),rep(0,1000))
 rgb_feature=cbind(rgb_feature,label)
 hsv_feature=cbind(hsv_feature,label)
