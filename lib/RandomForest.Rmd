@@ -50,7 +50,7 @@ rf.form <- as.formula(paste("filelabel", varNames1, sep = " ~ "))
 Random Forest business starts.
 ```{r}
 library(randomForest)
-rf=randomForest(rf.form,train_data,ntree=500,importance=T) # It really took tens of minutes
+rf=randomForest(rf.form,train_data,ntree=1000,importance=T) # It really took tens of minutes
 plot(rf)
 ```
 500 decision trees or a forest has been built using the Random Forest algorithm based learning. We can plot the error rate across decision trees. Black solid line is OOB error rate and colour lines for each class' error. The plot seems to indicate that after 300 decision trees, there is not a significant reduction in error rate.
@@ -81,7 +81,7 @@ confusionMatrix(data=test_data$predicted.response,
                 positive='1') # prediction accuracy rate is 62.75%
 
 ```
-
-
+500 decision trees: 62.75%
+1000 decision trees: 64.5% 
 
 
