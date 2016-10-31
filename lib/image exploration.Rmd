@@ -1,5 +1,5 @@
 ---
-title: "Image Feature Exploration"
+title: "Image Exploration"
 output: html_notebook
 ---
 
@@ -159,7 +159,7 @@ By discretizing the RGB values, we can get a set of color features. We subdivide
 ```{r}
 mat=list()
 freq_rgb=list()
-rgb_feature=list()
+rgb_feature=matrix(nrow=5, ncol=nR*nG*nB)
 
 nR <- 10
 nG <- 8
@@ -171,7 +171,7 @@ bBin <- seq(0, 1, length.out=nB)
 for (i in 1:5){
   mat[[i]] <- imageData(filename[[i]])
   freq_rgb[[i]] <- as.data.frame(table(factor(findInterval(mat[[i]][,,1], rBin), levels=1:nR), factor(findInterval(mat[[i]][,,2], gBin), levels=1:nG), factor(findInterval(mat[[i]][,,3], bBin), levels=1:nB)))
-  rgb_feature[[i]] <- as.numeric(freq_rgb[[i]]$Freq)/(ncol(mat[[i]])*nrow(mat[[i]])) # normalization
+  rgb_feature[i,] <- as.numeric(freq_rgb[[i]]$Freq)/(ncol(mat[[i]])*nrow(mat[[i]])) # normalization
 }
 
 str(rgb_feature) #each image has 800 features
@@ -197,7 +197,7 @@ vBin <- seq(0, 0.005, length.out=nV)
 mat_rgb <- mat
 mat_hsv <- list()
 freq_hsv <- list()
-hsv_feature <- list()
+hsv_feature <- matrix(nrow=5, ncol=nH*nS*nV)
 
 for (i in 1:5){
   dim(mat_rgb[[i]]) <- c(nrow(mat[[i]])*ncol(mat[[i]]), 3)
@@ -205,9 +205,10 @@ for (i in 1:5){
 
   freq_hsv[[i]] <- as.data.frame(table(factor(findInterval(mat_hsv[[i]][1,], hBin), levels=1:nH), factor(findInterval(mat_hsv[[i]][2,], sBin), levels=1:nS),  factor(findInterval(mat_hsv[[i]][3,], vBin), levels=1:nV)))
   
-  hsv_feature[[i]] <- as.numeric(freq_hsv[[i]]$Freq)/(ncol(mat[[i]])*nrow(mat[[i]])) # normalization
+  hsv_feature[i,] <- as.numeric(freq_hsv[[i]]$Freq)/(ncol(mat[[i]])*nrow(mat[[i]])) # normalization
 }
-str(hsv_feature) # 360 HSV features
+plot(hsv_feature[[1]],type="l")
+dim(hsv_feature) # 360 HSV features
 #The number of bins for each model (nH,nS,nV) is a tuning parameter for constructing color features. The total number of features is nHnSnV.
 ```
 
