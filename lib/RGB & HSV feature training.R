@@ -1,4 +1,4 @@
-########### RGB & HSV feature training ############
+########### RGB & HSV feature training ########################
 ########### Saved rgb_feature_train.RData and hsv_feature_train.RData in Output folder######
 
 
@@ -65,11 +65,15 @@ for (i in 1:1000){
   hsv_dog[i,] <- as.numeric(freq_hsv$Freq)/(ncol(mat)*nrow(mat)) # normalization
 }  # took 9 minutes to run
 
-
+### combine RGB and HSV features of chicken and dog 
 rgb_feature=rbind(rgb_chicken,rgb_dog)
 hsv_feature=rbind(hsv_chicken,hsv_dog)
+
+### add feature names
 colnames(rgb_feature) <- paste0("RGB",1:800)
 colnames(hsv_feature) <- paste0("HSV",1:360)
+
+### add response label to the last column
 label <- c(rep(1,1000),rep(0,1000))
 rgb_feature=cbind(rgb_feature,label)
 hsv_feature=cbind(hsv_feature,label)
