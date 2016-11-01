@@ -1,0 +1,9 @@
+Modus Operandi of Feature Extraction Algorithm:
+
+1. Take in every image
+2. Extract the R,G,B colors of every image
+3. Map every every Red, Blue or Green color to the nearest color
+4. Create a frequency map of color combination of each pixel
+5. We have have ensured our frequency count doesn't exceed 800
+6. The count for every combination thus obtained are our features
+7. Normalize features for every image
