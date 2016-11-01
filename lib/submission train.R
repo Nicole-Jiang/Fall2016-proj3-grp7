@@ -137,8 +137,8 @@ train <- function(dat_train, label_train, par=NULL){
   gbmfit <- train(dat_train, label_train,
                 method = "gbm", trControl = gbmcontrol, verbose = FALSE,
                 bag.fraction = 0.5, tuneGrid = gbmGrid)
-  gbm_fit <- gbm.fit(x = dat_train, y = label_train, n.trees = gbmfit$n.trees, interaction.depth = gbmfit$interaction.depth,
-                     shrinkage = gbmfit$shrinkage, n.minobsinnode = gbmfit$n.minobsinnode)   
+  gbm_fit <- gbm.fit(x = dat_train, y = label_train, n.trees = gbmfit$bestTune$n.trees, interaction.depth = gbmfit$bestTune$interaction.depth,
+                     shrinkage = gbmfit$bestTune$shrinkage, n.minobsinnode = gbmfit$bestTune$n.minobsinnode)   
   
   return(list(fit_ada=ada.fit,fit_rf=rf.fit, #fit_svm= svm.fit, kernel= kernel,
               dat_train= dat_train, label_train= label_train, k=tree.Tuning$k[1], fit_xgboost=xg.fit,
