@@ -23,6 +23,7 @@ The new features are RGB features. The methods are:  . We got 800 features for e
 
 Apply new features to the gbm model, we got the accuracy rate: 
 
+
 ### 3. Introduce new models
 ![image](https://github.com/TZstatsADS/Fall2016-proj3-grp7/blob/master/figs/Pre%2003.png)
 
@@ -55,3 +56,4 @@ Use multiple learning algorithms to obtain better predictive performance than co
   + More stable when apply to the new test set
   + Almost the highest accuracy rate
 
+5-folder cross validation accuracy rate is: %
