@@ -3,7 +3,7 @@
 ######################################################
 
 
-test <- function(fit_train, data.test){
+test <- function(train, data.test){
   
   ### Fit the classfication model with testing data
   
