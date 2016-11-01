@@ -22,7 +22,7 @@ train <- function(dat_train, label_train, par=NULL){
   library(randomForest)
   library(class)
   library(xgboost)
-  library(neuralnet)
+  library(caret)
   ###########################   Ada boost model
   ada.fit= ada(label_train~.,data=dat_train,type="discrete")
   
@@ -130,14 +130,17 @@ train <- function(dat_train, label_train, par=NULL){
   xg.fit <- xgboost(data=dtrain, params=best_param, nrounds=nround, nthread=6)
   #######################
   
-  #######simple neural network (we do not tune the parameter since the time is too long)
-  
-  data_train <- cbind(dat_train, label_train)
-  formular <- paste(names(data_train[,-ncol(data_train)]), collapse = '+')
-  formular <- paste('label_train~', formular, sep = '')
-  nn_fit <- neuralnet(formular, data = data_train, hidden = 2, rep = 1)  
+  #######gbm
+  gbmGrid <- expand.grid(interaction.depth = (1:5) * 2,n.trees = (1:10)*25,shrinkage = .1,
+                       n.minobsinnode = 10)
+  gbmcontrol <- trainControl(method = 'cv', number = 5)
+  gbmfit <- train(dat_train, label_train,
+                method = "gbm", trControl = gbmcontrol, verbose = FALSE,
+                bag.fraction = 0.5, tuneGrid = gbmGrid)
+  gbm_fit <- gbm.fit(x = dat_train, y = label_train, n.trees = gbmfit$n.trees, interaction.depth = gbmfit$interaction.depth,
+                     shrinkage = gbmfit$shrinkage, n.minobsinnode = gbmfit$n.minobsinnode)   
   
   return(list(fit_ada=ada.fit,fit_rf=rf.fit, #fit_svm= svm.fit, kernel= kernel,
               dat_train= dat_train, label_train= label_train, k=tree.Tuning$k[1], fit_xgboost=xg.fit,
-             fit_nn = nn_fit))
+             fit_gbm = gbm_fit))
 }
