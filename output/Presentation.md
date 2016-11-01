@@ -10,7 +10,7 @@
 
 ### 1. Baseline model
 
-The baseline model is using gradient boosting machine (gbm) with decision stumps on 5000 SIFT features. The accuracy rate is . 
+The baseline model is using gradient boosting machine (gbm) with decision stumps on 5000 SIFT features. The accuracy rate is 74%. 
 
 ![image](https://github.com/TZstatsADS/Fall2016-proj3-grp7/blob/master/figs/Pre%2001.png)
 
@@ -21,7 +21,7 @@ The baseline model is using gradient boosting machine (gbm) with decision stumps
 
 The new features are RGB features. The methods are:  . We got 800 features for each photo. 
 
-Apply new features to the gbm model, we got the accuracy rate: 
+Apply new features to the gbm model, we got the accuracy rate: 87.3% (The accuracy for the baseline model is %. Improved by %.)
 
 
 ### 3. Introduce new models
@@ -35,15 +35,12 @@ We run Ada boost with RGB features and did 5-folder cross validation. The averag
 We run Random forest with RGB features and did 5-folder cross validation. The average accuracy rate is: 92.1%
 
 #### 3.3 Knn model
-We run Knn model with RGB features and did 5-folder cross validation. The average accuracy rate is: %
+We run Knn model with RGB features and did 5-folder cross validation. The average accuracy rate is: 80.6%
 
 #### 3.4 xgboost model
-We run xgboost model with RGB features and did 5-folder cross validation. The average accuracy rate is: %
+We run xgboost model with RGB features and did 5-folder cross validation. The average accuracy rate is: 92.2%
 
-#### 3.5 Neuro network model
-We run Neuro network model with RGB features and did 5-folder cross validation. The average accuracy rate is: %
-
-#### 3.6 Ensemble methods
+#### 3.5 Ensemble methods
 Use multiple learning algorithms to obtain better predictive performance than could be obtained from any of the constituent learning algorithms alone. 
 
 + Details
@@ -56,4 +53,4 @@ Use multiple learning algorithms to obtain better predictive performance than co
   + More stable when apply to the new test set
   + Almost the highest accuracy rate
 
-5-folder cross validation accuracy rate is: %
+5-folder cross validation accuracy rate is: %(The accuracy for the gbm model is %. Improved by %.)
