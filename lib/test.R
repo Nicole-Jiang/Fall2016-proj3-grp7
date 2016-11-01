@@ -58,8 +58,7 @@ test <- function(fit_train, data.test){
                        knn=as.numeric(knn.pred)-1)
   
   test= as.numeric(rowMeans(results)>0.5)
-  mean(data.test$filelabel==test)
-  return(as.numeric(pred> 0.5))
+  return(test)
   
 }
 
