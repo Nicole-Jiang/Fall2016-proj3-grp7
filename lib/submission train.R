@@ -22,6 +22,7 @@ train <- function(dat_train, label_train, par=NULL){
   library(randomForest)
   library(class)
   library(xgboost)
+  library(neuralnet)
   ###########################   Ada boost model
   ada.fit= ada(label_train~.,data=dat_train,type="discrete")
   
@@ -129,7 +130,14 @@ train <- function(dat_train, label_train, par=NULL){
   xg.fit <- xgboost(data=dtrain, params=best_param, nrounds=nround, nthread=6)
   #######################
   
+  #######simple neural network (we do not tune the parameter since the time is too long)
+  
+  data_train <- cbind(dat_train, label_train)
+  formular <- paste(names(data_train[,-ncol(data_train)]), collapse = '+')
+  formular <- paste('label_train~', formular, sep = '')
+  nn_fit <- neuralnet(formular, data = data_train, hidden = 2, rep = 1)  
   
   return(list(fit_ada=ada.fit,fit_rf=rf.fit, #fit_svm= svm.fit, kernel= kernel,
-              dat_train= dat_train, label_train= label_train, k=tree.Tuning$k[1], fit_xgboost=xg.fit))
+              dat_train= dat_train, label_train= label_train, k=tree.Tuning$k[1], fit_xgboost=xg.fit,
+             fit_nn = nn_fit))
 }
