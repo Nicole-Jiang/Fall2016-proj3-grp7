@@ -2,7 +2,7 @@ library(caret)
 data.all= as.data.frame(rgb_feature)
 names(data.all)[801]= "filelabel"
 data.all$filelabel = as.factor(data.all$filelabel)
-predict_results =matrix(nrow=5, ncol= 5)
+data.all$filelabel=factor(data.all$filelabel,labels = c("no", "yes"))
 index= sample(rep(1:5,400))
 cor_pred= list()
 final_results= vector()
@@ -39,14 +39,14 @@ for(i in 1:5){
   # svm
   ##########################################
   #library(e1071)
-  #svm.fit=svm(filelabel~., data = data.train,kernel="radial",scale = T)
-  #svm.pred= predict(svm.fit,newdata = data.test)
-  #predict_results[1,4]=mean(data.test$filelabel==svm.pred)
+  svm.fit=svm(filelabel~., data = data.train,kernel="radial")
+  svm.pred= predict(svm.fit,newdata = data.test)
+  predict_results[1,4]=mean(data.test$filelabel==svm.pred)
   ##########################################
   # Knn
   ##########################################
   library(class)
-  knn.pred= knn(data.train[,-801], data.test[,-801], cl= data.train$filelabel, k = 7, l = 1)
+  knn.pred= knn(data.train[,-801], data.test[,-801], cl= data.train$filelabel, k = 7)
   predict_results[i,4]=mean(data.test$filelabel==knn.pred)
   ##########################################
   # logistic
