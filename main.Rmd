@@ -1,32 +1,33 @@
 ---
 title: "Main Script"
-author: "Yuting Ma"
-date: "February 24, 2016"
+author: "Group 7"
+date: "November 1, 2016"
 output: html_document
 ---
 
-This is a template for running experiments of image analysis (or any predictive modeling). The R script can be found in main.R. 
+This is adpated from the template of Yuting Ma for running experiments of image analysis (or any predictive modeling). The R script can be found in main.R. 
 
 ### Specify directories
 Set the working directory to the image folder. Specify the training and the testing set. For data without an independent test/validation set, you need to create your own testing data by random subsampling. In order to obain reproducible results, set.seed() whenever randomization is used. 
 ```{r, eval=FALSE}
-setwd("./proj3_sample")
+setwd("~/Google Drive/Columbia/5243 ADS/Project 3/Fall2016-proj3-grp7/")
 ```
 
 ```{r}
-img_train_dir <- "./data/zipcode_train/"
+img_train_dir <- "~/Google Drive/Columbia/5243 ADS/Project 3/Project3_poodleKFC_train/images/"
 img_test_dir <- "./data/zipcode_test/"
 ```
 
 ### Import training images class labels
-For the example of zip code digits, we code digit 9 as "1" and digit 7 as "0" for binary classification.
+For labradoodle dogs vs fried chicken, we code chicken as "1" and dogs as "0" for binary classification.
 ```{r}
-label_train <- read.table("./data/zip_train_label.txt", header=F)
-label_train <- as.numeric(unlist(label_train) == "9")
+label_train <- c(rep("1",1000),rep("0",1000))
+#label_train <- read.table("./data/zip_train_label.txt", header=F)
+#label_train <- as.numeric(unlist(label_train) == "9")
 ```
 
-### Construct visual feature
-For this simple example, we use the raw pixel values as the visual features. Note that this strategy only works for images with uniform size and with identical layout. For some other image datasets, the feature function should be able to handle heterogeneous input images. Save the constructed features to the output subfolder.
+### Construct visual features
+For our project, we construct 800 RGB features. Save the constructed features to the output subfolder.
 ```{r}
 source("./lib/feature.R")
 tm_feature_train <- system.time(dat_train <- feature(img_train_dir, "img_zip_train"))
@@ -73,7 +74,7 @@ arrows(depth_values, err_cv[,1]-err_cv[,2],depth_values, err_cv[,1]+err_cv[,2],
 #dev.off()
 ```
 
-* Choose the "best"" parameter value
+* Choose the "best" parameter value
 ```{r}
 depth_best <- depth_values[which.min(err_cv[,1])]
 par_best <- list(depth=depth_best)
