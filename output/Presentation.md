@@ -15,23 +15,30 @@ The baseline model is using gradient boosting machine (gbm) with decision stumps
 ![image](https://github.com/TZstatsADS/Fall2016-proj3-grp7/blob/master/figs/Pre%2001.png)
 
 
+### 2. Introduce new features
+
+![image](https://github.com/TZstatsADS/Fall2016-proj3-grp7/blob/master/figs/Pre%2002.png)
+The new features are RGB features. The methods are:  . We got 800 features for each photo. 
+
+Apply new features to the gbm model, we got the accuracy rate: 
+
+### 3. Introduce new models
+![image](https://github.com/TZstatsADS/Fall2016-proj3-grp7/blob/master/figs/Pre%2003.png)
+#### 3.1 Ada boost
+
+We run Ada boost with RGB features and did 5-folder cross validation. The average accuracy rate is: 92.75%
+
+#### 3.2 Random forest
+We run Random forest with RGB features and did 5-folder cross validation. The average accuracy rate is: 92.1%
+
+#### 3.3 Knn model
+We run Knn model with RGB features and did 5-folder cross validation. The average accuracy rate is: %
+
+#### 3.4 xgboost model
+We run xgboost model with RGB features and did 5-folder cross validation. The average accuracy rate is: %
+
+#### 3.5 Neuro network model
+We run Neuro network model with RGB features and did 5-folder cross validation. The average accuracy rate is: %
 
 
-The enhanced model is using ensembled model of svm... on 800 RGB features. The accuracy rate is.
 
-
-	
-**Contribution statement**: ([default](doc/a_note_on_contributions.md)) All team members contributed equally in all stages of this project. All team members approve our work presented in this GitHub repository including this contributions statement. 
-
-Following [suggestions](http://nicercode.github.io/blog/2013-04-05-projects/) by [RICH FITZJOHN](http://nicercode.github.io/about/#Team) (@richfitz). This folder is orgarnized as follows.
-
-```
-proj/
-├── lib/
-├── data/
-├── doc/
-├── figs/
-└── output/
-```
-
-Please see each subfolder for a README file.
