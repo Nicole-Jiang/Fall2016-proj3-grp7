@@ -1,5 +1,6 @@
 ######################################################
-### Fit the classification model with testing data ###
+### Fit the classification model with testing data 
+### Author: Jiayu Wang
 ######################################################
 
 data.test= data.all[-index,-801]
