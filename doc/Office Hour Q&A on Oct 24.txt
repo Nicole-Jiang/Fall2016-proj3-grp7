@@ -1,0 +1,63 @@
+########  Q&A at Professor Office Hour at Noon  ###
+########  Wanyi Zhang (Vivien)  ###################
+########  Mon, Oct 24th, 2016  ####################
+
+
+
+* FEATURES:
+—————————————————————————————————————————————————————
+
+
+1. How to get feature set 2? Using SURF or Akaze?
+
+A: No need to use fancy features, can just add simple features like color. With only one week left you may want to find better classifiers more than finding new features.
+
+The given classifier is too simple.
+- Last semester a group simply used convolutional method. (Skanda sent us a blog post tutorial related to that method. We can definitely dig into that.)
+- CNN need to be tuned, which takes time.
+
+
+—————————————————————————————————————————————————————
+
+
+2. Would adding more features slow down significantly the testing process?
+
+A: Depends on the model you use. GBM stumps is not slow, but others may take long.
+
+
+—————————————————————————————————————————————————————
+
+
+3. Do we have to use all 5000 SIFT features as baseline model? Or extract some important ones? How to check if features in set 1 are in set 2?
+
+A: Don’t have to, but if you use less, the performance of your model may be poorer. You can find the important ones based on the weights assigned to each feature after training. 
+
+
+—————————————————————————————————————————————————————
+
+
+4. Is there a way to understand the SIFT features? Use openCV?
+
+A: You can see it more clearly by looking at the classifier after training.
+
+
+—————————————————————————————————————————————————————
+
+
+5. What if we brainstormed some new features but don’t know if they are included in the SIFT features? 
+
+A: There is no way we could tell.
+
+
+—————————————————————————————————————————————————————
+
+
+* TECHNICAL PROBLEM:
+
+1. OpenCV for Windows? or maybe can we skip installing OpenCV and do this project?
+
+A: Not familiar with Windows. OpenCV is for extracting SIFT features (which we do not need to do) and other feature extraction functions (perhaps we may want to do). 
+
+
+
+

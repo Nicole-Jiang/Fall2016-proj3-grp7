@@ -1,0 +1,29 @@
+###### Key Points at Class Wed Oct 26th ######
+
+
+When doing prediction, results have to be 0 for dog and 1 for fried chicken.
+
+TA said we must include 'model selection' process in train.R, i.e. the process of tuning parameters.
+
+Evaluate average training CPU time per fold per replicate per replicate. 
+They do 5-fold cross validation for 20 times, so that's 20 replicates.
+
+Full marks if error rate of claimed, untuned model, and retrained model are the same. Punishment for large gap.
+* untuned model vs retrained model:
+      untuned model: train training data, and test testing data (what we do at testing)
+      retrained model: train testing data, and test testing data (what TA's do to reproduce)
+
+
+------------------------------------------------------------
+Recommendation to our group:
+
+stack model (integrate all models' advantages):
+compute the assigned probability out of each model, treat them as new variables, and run another layer of models
+
+Color feature RGB
+
+------------------------------------------------------------
+Detailed PPT slides:
+
+Submission and evaluation: https://github.com/TZstatsADS/ADS_Teaching/blob/master/Tutorials/project3_submission.pdf
+Summary of Spring projects: https://github.com/TZstatsADS/ADS_Teaching/blob/master/Spring2016/Tutor ials/wk10_summary_proj3.pdf

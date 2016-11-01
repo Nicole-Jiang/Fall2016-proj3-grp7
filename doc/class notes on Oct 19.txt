@@ -1,0 +1,81 @@
+Evaluation: not about prediction accuracy, but reproducibility
+
+Baseline model - SIFt descriptors as features
+Suggested model: gradient boosting machine GBM  w/ decision stumps as classifier
+
+Task 1: implement and tune it correctly
+
+nested strategy
+- add new features (SIFT)
+- new classifier/models/method (GBM)
+compare both directions rather than diagonally
+
+* it's mobile app, so running cannot take long and too much computation
+
+Submission: Github repo
+feature.R
+traint.R
+test.R
+
+
+Starter code: main.Rmd
+
+
+* Training take days is fine. Processing features and prediction should be fast.
+
+
+Evaluation:
+- presentaion 40%
+- reproducibility based on new images 60%
+
+
+---
+Image processing:
+
+low-pass filtering: detect foreground color
+high-pass: detect edges 
+median filter: remove noise while keeping the edges
+Adaptive thresholding
+Contouring: outline analysis, then can calculate local curvature
+Package 'Momocs': shape analysis, with link at the bottom
+
+Color features: *resize pictures to be same size or normalize histograms, to compare 
+
+
+---
+SIFT:
+rescale using Gaussian, subtract to get Difference of Gaussian (DoG), get the max/min points as keypoints
+filter keypoints: discard those below threshold
+Orientation: direction that color changes most, PCA actually
+don't worry if don't understand theory
+Packages have already provided functions
+
+SIFT can only do gray scale
+Other methods better than SIFT
+
+descriptors are features
+A 16x16 neighbourhood around the keypoint is taken. It is devided into 16 sub-blocks of 4x4 size. For each sub-block, 8 bin orientation histogram is created. So a total of 128 bin values are available.
+
+
+Bag—of-Words (BoW) model:
+derived from NPL
+visual words, prepare a vocabulary book (formed by k-means clustering)
+
+
+Pipeline:
+flowchart
+give us SIFT feature histograms rather than us developing them
+
+---
+An Introduction to Gradient Boosting Machine
+'GBM' package available
+'xgboost' less flexible
+
+
+(All the slides and markdown files can be founded on GitHub https://github.com/TZstatsADS/ADS_Teaching/tree/master/Tutorials.)
+
+
+
+
+
+
