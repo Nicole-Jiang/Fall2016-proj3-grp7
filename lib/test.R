@@ -27,6 +27,7 @@ test <- function(train, data.test){
   library(e1071)
   library(pROC)
   library(class)
+  library(neuralnet)
   
   
   predict_results = vector()
@@ -52,6 +53,10 @@ test <- function(train, data.test){
   xg.pred <- as.numeric(xg.pred > mean(xg.pred))
   #predict_results[5] <- mean(data.test$filelabel == xg.pred)
   
+  ##neural network
+  nn.pred <- compute(train$fit_nn, data.test)
+  nn.pred <- as.numeric(nn.pred$net.result > mean(nn.pred$net.result))
+    
   ##majority vote
   results = data.frame(ada=as.numeric(ada.predict)-1, 
                        #gbm=gbm.predict,
