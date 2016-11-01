@@ -35,63 +35,72 @@ train <- function(dat_train, label_train, par=NULL){
   rf.fit=randomForest(label_train~., dat_train, mtry=best.mtry, ntree=600, importance=T)
   ###########################  Tune svm 
   #cross validation for kernels
-  index= sample(rep(1:5,nrow(dat_train)/5))
-  error.radial=vector()
-  error.linear=vector()
-  error.poly=vector()
+  #index= sample(rep(1:5,nrow(dat_train)/5))
+  #error.radial=vector()
+  #error.linear=vector()
+  #error.poly=vector()
   
-  for(i in 1:5){
+  #for(i in 1:5){
     #trainingset=data.train[index != i,]
     #testset=data.train[index==i,]
     #names(trainingset)[ncol(data.train)]="label_train"
     #names(testset)[ncol(data.train)]= "label_train"
-    trainingset=dat_train[index != i,]
-    testset=dat_train[index==i,]
-    trainingset$label_train= label_train[index != i]
-    testset$label_train= label_train[index==i]
+    #trainingset=dat_train[index != i,]
+    #testset=dat_train[index==i,]
+    #trainingset$label_train= label_train[index != i]
+    #testset$label_train= label_train[index==i]
     
-    trainingset$label_train= factor(as.numeric(trainingset$label_train)-1)
-    testset$label_train=factor(as.numeric(trainingset$label_train)-1)
+    #trainingset$label_train= factor(as.numeric(trainingset$label_train)-1)
+    #testset$label_train=factor(as.numeric(trainingset$label_train)-1)
     
     
-    svm.fit.radial=svm(label_train~.,data=trainingset,kernel="radial")
-    svm.fit.linear=svm(label_train~.,data=trainingset,kernel="linear")
-    svm.fit.poly=svm(label_train~.,data=trainingset,kernel="polynomial")
+    #svm.fit.radial=svm(label_train~.,data=trainingset,kernel="radial")
+    #svm.fit.linear=svm(label_train~.,data=trainingset,kernel="linear")
+    #svm.fit.poly=svm(label_train~.,data=trainingset,kernel="polynomial")
     
-    svm.pred.radial=predict(svm.fit.radial,newdata=testset)
-    svm.pred.linear=predict(svm.fit.linear,newdata=testset)
-    svm.pred.poly=predict(svm.fit.poly,newdata=testset)
+    #svm.pred.radial=predict(svm.fit.radial,newdata=testset)
+    #svm.pred.linear=predict(svm.fit.linear,newdata=testset)
+    #svm.pred.poly=predict(svm.fit.poly,newdata=testset)
     
-    err.radial=mean(svm.pred.radial!=testset$label_train)
-    err.linear=mean(svm.pred.linear!=testset$label_train)
-    err.poly=mean(svm.pred.poly!=testset$label_train)
+    #err.radial=mean(svm.pred.radial!=testset$label_train)
+    #err.linear=mean(svm.pred.linear!=testset$label_train)
+    #err.poly=mean(svm.pred.poly!=testset$label_train)
     
-    error.radial=c(error.radial,err.radial)
-    error.linear=c(error.linear,err.linear)
-    error.poly=c(error.poly,err.poly)
-  }
+    #error.radial=c(error.radial,err.radial)
+    #error.linear=c(error.linear,err.linear)
+    #error.poly=c(error.poly,err.poly)
+  #}
   
-  result.matrix=matrix(nrow=3,ncol=1,c(mean(error.radial),mean(error.linear),mean(error.poly)))
-  rownames(result.matrix)=c("radial","linear","polynomial")
-  index=which.min(result.matrix)
-  kernel= names(result.matrix[index,])
+  #result.matrix=matrix(nrow=3,ncol=1,c(mean(error.radial),mean(error.linear),mean(error.poly)))
+  #rownames(result.matrix)=c("radial","linear","polynomial")
+  #index=which.min(result.matrix)
+  #kernel= names(result.matrix[index,])
   
   
   ###########################   Tune Knn model
+<<<<<<< Updated upstream
   tree.Tuning<-data.frame(k=1:10,cvError=rep(NA,10))
   for(i in 1:nrow(tree.Tuning)){
+=======
+  knn.Tuning<-data.frame(k=1:10,cvError=rep(NA,10))
+  for(i in 1:nrow(knn.Tuning)){
+>>>>>>> Stashed changes
     index= sample(rep(1:5,nrow(dat_train)/5))
     cvError.temp=0
     for(j in 1:5){
       data.train= dat_train[index != j,]
       data.test= dat_train[index==j,]
+<<<<<<< Updated upstream
       knn.temp= knn(data.train, data.test, cl=label_train[index != j] , k = tree.Tuning$k[i])
+=======
+      knn.temp= knn(data.train, data.test, cl=label_train[index != j] , k = knn.Tuning$k[i])
+>>>>>>> Stashed changes
       cvError.temp=cvError.temp+(1- mean(label_train[index == j]==knn.temp))/5
     }
-    tree.Tuning$cvError[i]= cvError.temp
+    knn.Tuning$cvError[i]= cvError.temp
   }
   ###########################   Get k for Knn model
-  tree.Tuning<-tree.Tuning[order(tree.Tuning$cvError),]
+  knn.Tuning<-knn.Tuning[order(knn.Tuning$cvError),]
   ###########################   Tune XG boost
   dtrain <- xgb.DMatrix(as.matrix(dat_train),label = as.numeric(label_train)-1)
   best_param = list()
