@@ -6,6 +6,12 @@
 ### Project 7
 ### ADS Fall 2016
 
+if(!require(EBImage)){
+  source("http://bioconductor.org/biocLite.R")
+  biocLite("EBImage")
+  library(EBImage)
+}
+
 feature <- function(img_dir, img_name, data_name=NULL){
   
   ### Construct RGB features for training/testing images
