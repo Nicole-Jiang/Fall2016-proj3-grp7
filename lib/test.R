@@ -54,8 +54,8 @@ test <- function(train, data.test){
   #predict_results[5] <- mean(data.test$filelabel == xg.pred)
   
   ##neural network
-  nn.pred <- compute(train$fit_nn, data.test)
-  nn.pred <- as.numeric(nn.pred$net.result > mean(nn.pred$net.result))
+  gbm.pred <- predict(fit_gbm, data.test)
+  gbm.pred <- as.numeric(gbm.pred > mean(gbm.pred))
     
   ##majority vote
   results = data.frame(ada=as.numeric(ada.predict)-1, 
@@ -63,7 +63,8 @@ test <- function(train, data.test){
                        rf= as.numeric(rf.predict)-1,
                        #svm=as.numeric(svm.pred)-1,
                        knn=as.numeric(knn.pred)-1,
-                       xg=xg.pred)
+                       xg=xg.pred,
+                      gbm = gbm.pred)
   
   test= as.numeric(rowMeans(results)>0.5)
   return(test)
