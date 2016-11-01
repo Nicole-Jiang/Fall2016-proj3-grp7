@@ -21,6 +21,7 @@ train <- function(dat_train, label_train, par=NULL){
   library(gbm)
   library(randomForest)
   library(class)
+  library(xgboost)
   ###########################   Ada boost model
   ada.fit= ada(label_train~.,data=dat_train,type="discrete")
   
@@ -78,13 +79,13 @@ train <- function(dat_train, label_train, par=NULL){
   
   ###########################   Tune Knn model
   tree.Tuning<-data.frame(k=1:10,cvError=rep(NA,10))
-  for(i in 1:nrow(boostingTuning)){
+  for(i in 1:nrow(tree.Tuning)){
     index= sample(rep(1:5,nrow(dat_train)/5))
     cvError.temp=0
     for(j in 1:5){
       data.train= dat_train[index != j,]
       data.test= dat_train[index==j,]
-      knn.temp= knn(data.train, data.test, cl=label_train[index != j] , k = boostingTuning$k[i])
+      knn.temp= knn(data.train, data.test, cl=label_train[index != j] , k = tree.Tuning$k[i])
       cvError.temp=cvError.temp+(1- mean(label_train[index == j]==knn.temp))/5
     }
     tree.Tuning$cvError[i]= cvError.temp
