@@ -34,16 +34,16 @@ test <- function(fit_train, data.test){
   predict_results[1]= mean(data.test$filelabel==ada.predict)
   
   ##randeom forest
-  out.rf <- predict(gbm.fit, newdata=data.test,n.trees= train$ntrees)
+  out.rf <- predict(train$gbm.fit, newdata=data.test,n.trees= train$ntrees)
   rf.predict=as.numeric(out.rf > mean(out.rf)) 
   predict_results[2]= mean(data.test$filelabel==rf.predict)
   
   ##svm
-  svm.pred= predict(svm.fit,newdata = data.test)
+  svm.pred= predict(train$svm.fit,newdata = data.test)
   predict_results[3]=mean(data.test$filelabel==svm.pred)
   
   ##knn
-  knn.pred= knn(data.train[,-801], data.test[,-801], cl= data.train$filelabel, k = train$k)
+  knn.pred= knn(train$dat_train, train$label_train, cl= data.train$filelabel, k = train$k)
   predict_results[4]=mean(data.test$filelabel==knn.pred)
   
   ##xgboost
