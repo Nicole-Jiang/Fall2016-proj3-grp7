@@ -78,23 +78,14 @@ train <- function(dat_train, label_train, par=NULL){
   
   
   ###########################   Tune Knn model
-<<<<<<< Updated upstream
-  tree.Tuning<-data.frame(k=1:10,cvError=rep(NA,10))
-  for(i in 1:nrow(tree.Tuning)){
-=======
   knn.Tuning<-data.frame(k=1:10,cvError=rep(NA,10))
   for(i in 1:nrow(knn.Tuning)){
->>>>>>> Stashed changes
     index= sample(rep(1:5,nrow(dat_train)/5))
     cvError.temp=0
     for(j in 1:5){
       data.train= dat_train[index != j,]
       data.test= dat_train[index==j,]
-<<<<<<< Updated upstream
-      knn.temp= knn(data.train, data.test, cl=label_train[index != j] , k = tree.Tuning$k[i])
-=======
       knn.temp= knn(data.train, data.test, cl=label_train[index != j] , k = knn.Tuning$k[i])
->>>>>>> Stashed changes
       cvError.temp=cvError.temp+(1- mean(label_train[index == j]==knn.temp))/5
     }
     knn.Tuning$cvError[i]= cvError.temp
