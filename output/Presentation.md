@@ -19,7 +19,12 @@ The baseline model is using gradient boosting machine (gbm) with decision stumps
 
 ![image](https://github.com/TZstatsADS/Fall2016-proj3-grp7/blob/master/figs/Pre%2002.png)
 
-The new features are RGB features. The methods are:  . We got 800 features for each photo. 
+The new features are RGB features. 
+The methods:
+  + Take in every image and extract the R,G,B colors of every image
+  + Map every Red, Blue or Green color to the nearest color
+  + Create a frequency map of every color combination of each pixel (In our case, we took 800 combinations)
+  + Use the frequency for one combination as one feature. Hence, we have 800 features for a single image
 
 Apply new features to the gbm model, we got the accuracy rate: 87.3% (The accuracy for the baseline model is %. Improved by %.)
 
