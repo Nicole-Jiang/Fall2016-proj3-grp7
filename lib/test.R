@@ -30,16 +30,16 @@ test <- function(train, data.test){
   predict_results = vector()
   
   ##ada
-  ada.predict <- predict(train$fit.ada,newdata=data.test,type="vector")
+  ada.predict <- predict(train$fit_ada,newdata=data.test,type="vector")
   predict_results[1]= mean(data.test$filelabel==ada.predict)
   
   ##randeom forest
-  out.rf <- predict(train$gbm.fit, newdata=data.test,n.trees= train$ntrees)
+  out.rf <- predict(train$rf_fit, newdata=data.test,n.trees= 600)
   rf.predict=as.numeric(out.rf > mean(out.rf)) 
   predict_results[2]= mean(data.test$filelabel==rf.predict)
   
   ##svm
-  svm.pred= predict(train$svm.fit,newdata = data.test)
+  svm.pred= predict(train$svm_fit,newdata = data.test)
   predict_results[3]=mean(data.test$filelabel==svm.pred)
   
   ##knn
@@ -47,7 +47,7 @@ test <- function(train, data.test){
   predict_results[4]=mean(data.test$filelabel==knn.pred)
   
   ##xgboost
-  xg.pred <- predict(xg.fit, as.matrix(data.test[,1:800]))
+  xg.pred <- predict(train$xg_fit, as.matrix(data.test))
   xg.pred <- as.numeric(xg.pred > mean(xg.pred))
   predict_results[5] <- mean(data.test$filelabel == xg.pred)
   
