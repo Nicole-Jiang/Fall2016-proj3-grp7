@@ -20,8 +20,14 @@ varNames1 <- paste(varNames, collapse = "+")
 # Add response variable and convert to a formula object
 rf.form <- as.formula(paste("label", varNames1, sep = " ~ "))
 
+# Tune parameter 'mtry'
+set.seed(421)
+bestmtry <- tuneRF(y=train_data[,801], x=train_data[,-801], stepFactor=1.5, improve=1e-5, ntree=600)
+print(bestmtry)
+best.mtry <- bestmtry[,1][which.min(bestmtry[,2])]
+
 # Run random forest
-rf=randomForest(rf.form, train_data, ntree=1000, importance=T)
+rf=randomForest(rf.form, train_data, mtry=best.mtry, ntree=600, importance=T)
 plot(rf)
 
 # Predicting response variable
