@@ -56,8 +56,8 @@ Use multiple learning algorithms to obtain better predictive performance than co
 	+ Take a simple majority vote of their predictions as the final prediction
 
 + Advantages:
-  + Combind the advantages of each model
-  + More stable when apply to the new test set
-  + Almost the highest accuracy rate
+  + Average out biases by combining the advantages of each model
+  + Reduce the variance and become more stable when apply to the new test set
+  + Avoid overfitting
 
 5-folder cross validation accuracy rate is: % (The accuracy for the gbm model is 73.7%. Improved by %.)
