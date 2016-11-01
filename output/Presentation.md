@@ -18,12 +18,14 @@ The baseline model is using gradient boosting machine (gbm) with decision stumps
 ### 2. Introduce new features
 
 ![image](https://github.com/TZstatsADS/Fall2016-proj3-grp7/blob/master/figs/Pre%2002.png)
+
 The new features are RGB features. The methods are:  . We got 800 features for each photo. 
 
 Apply new features to the gbm model, we got the accuracy rate: 
 
 ### 3. Introduce new models
 ![image](https://github.com/TZstatsADS/Fall2016-proj3-grp7/blob/master/figs/Pre%2003.png)
+
 #### 3.1 Ada boost
 
 We run Ada boost with RGB features and did 5-folder cross validation. The average accuracy rate is: 92.75%
@@ -40,5 +42,16 @@ We run xgboost model with RGB features and did 5-folder cross validation. The av
 #### 3.5 Neuro network model
 We run Neuro network model with RGB features and did 5-folder cross validation. The average accuracy rate is: %
 
+#### 3.6 Ensemble methods
+Use multiple learning algorithms to obtain better predictive performance than could be obtained from any of the constituent learning algorithms alone. 
 
++ Details
+	+ Apply different models (Adaboost, Random forest, Knn, xgboost and Neuro network) and tune the parameters
+	+ Use those parameters to predict the test set
+	+ Take a simple majority vote of their predictions as the final prediction
+
++ Advantages:
+  + Combind the advantages of each model
+  + More stable when apply to the new test set
+  + Almost the highest accuracy rate
 
