@@ -14,7 +14,7 @@ compare both directions rather than diagonally
 
 Submission: Github repo
 feature.R
-traint.R
+train.R
 test.R
 
 
