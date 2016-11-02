@@ -1,4 +1,4 @@
-data.all= as.data.frame(rgb_feature)
+#data.all= as.data.frame(rgb_feature)
 #names(data.all)[801]= "filelabel"
 #data.all$filelabel = as.factor(data.all$filelabel)
 #data.all$filelabel=factor(data.all$filelabel,labels = c("no", "yes"))
