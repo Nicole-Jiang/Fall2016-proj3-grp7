@@ -38,7 +38,7 @@ feature <- function(img_dir, img_name){
   
   ### Extract 800 RGB features
   for (i in 1:n_files){
-    mat <- imageData(readImage(paste0(img_dir, img_name, "_", sprintf("%04s", i), ".jpg")))
+    mat <- imageData(readImage(paste0(img_dir,"/", img_name, "_", sprintf("%04s", i), ".jpg")))
     freq_rgb <- as.data.frame(table(factor(findInterval(mat[,,1], rBin), levels=1:nR), factor(findInterval(mat[,,2], gBin), levels=1:nG), factor(findInterval(mat[,,3], bBin), levels=1:nB)))
     rgb_feature[i,] <- as.numeric(freq_rgb$Freq)/(ncol(mat)*nrow(mat)) # normalization
   }
@@ -47,10 +47,10 @@ feature <- function(img_dir, img_name){
   colnames(rgb_feature) <- paste0("RGB",1:800)
   
   ### Conbine RGB features with SIFT features into final features
-  sift_features <- read.csv("~/Google Drive/Columbia/5243 ADS/Project 3/Project3_poodleKFC_train/sift_features.csv")
+  sift_features <- read.csv(paste0(img_dir,"/sift_features.csv"))
   Feature_eval <- as.data.frame(cbind(rgb_feature, t(sift_features)))
   
   ### output constructed features
-  save(Feature_eval, file="./output/Feature_eval.RData")
+  save(Feature_eval, file=paste0(img_dir,"/Feature_eval.RData"))
   return(Feature_eval)
 }
