@@ -30,16 +30,19 @@ train <- function(dat_train, label_train, par=NULL){
   library(xgboost)
   library(caret)
   ###########################   Ada boost model
-  ada.fit= ada(label_train~.,data=dat_train1,type="discrete")
+  #ada.fit= ada(label_train~.,data=dat_train1,type="discrete")
+  ada.fit = ada(as.factor(label_train)~., data = dat_train1, type = 'discrete')
+  print('adaboost done')
   
   ########################## Tune random forest model
   # Tune parameter 'mtry'
   set.seed(1234)
-  bestmtry <- tuneRF(y=label_train, x=dat_train1, stepFactor=1.5, improve=1e-5, ntree=600)
+  bestmtry <- tuneRF(y=as.factor(label_train), x=dat_train1, stepFactor=1.5, improve=1e-5, ntree=600)
   best.mtry <- bestmtry[,1][which.min(bestmtry[,2])]
   
   ########################### Get random forest model
-  rf.fit=randomForest(label_train~., dat_train1, mtry=best.mtry, ntree=600, importance=T)
+  rf.fit=randomForest(as.factor(label_train)~., dat_train1, mtry=best.mtry, ntree=600, importance=T)
+  print('randomforest done')
   ###########################   Tune Knn model
   knn.Tuning<-data.frame(k=1:10,cvError=rep(NA,10))
   for(i in 1:nrow(knn.Tuning)){
@@ -48,15 +51,16 @@ train <- function(dat_train, label_train, par=NULL){
     for(j in 1:5){
       data.train= dat_train1[index != j,]
       data.test= dat_train1[index==j,]
-      knn.temp= knn(data.train, data.test, cl=label_train[index != j] , k = knn.Tuning$k[i])
+      knn.temp= knn(data.train, data.test, cl=as.factor(label_train[index != j]) , k = knn.Tuning$k[i])
       cvError.temp=cvError.temp+(1- mean(label_train[index == j]==knn.temp))/5
     }
     knn.Tuning$cvError[i]= cvError.temp
   }
   ###########################   Get k for Knn model
   knn.Tuning<-knn.Tuning[order(knn.Tuning$cvError),]
+  print('knn done')
   ###########################   Tune XG boost
-  dtrain <- xgb.DMatrix(as.matrix(dat_train1),label = as.numeric(label_train)-1)
+  dtrain <- xgb.DMatrix(as.matrix(dat_train1),label = label_train)
   best_param = list()
   best_seednumber = 1234
   best_logloss = Inf
@@ -90,34 +94,32 @@ train <- function(dat_train, label_train, par=NULL){
   nround = best_logloss_index
   set.seed(best_seednumber)
   xg.fit <- xgboost(data=dtrain, params=best_param, nrounds=nround, nthread=6)
+  print('xgboost done')
   #######################
   #######gbm
   gbmGrid <- expand.grid(interaction.depth = (3:5) * 2,n.trees = (8:10)*25,shrinkage = .1,
                          n.minobsinnode = 10)
   gbmcontrol <- trainControl(method = 'cv', number = 5)
-  gbmfit <- caret::train(dat_train1, as.numeric(label_train)-1,
+  gbmfit <- caret::train(dat_train1, label_train,
                          method = "gbm", trControl = gbmcontrol, verbose = FALSE,
                          bag.fraction = 0.5, tuneGrid = gbmGrid)
-  gbm_fit <- gbm.fit(x = dat_train1, y = as.numeric(label_train)-1, n.trees = gbmfit$bestTune$n.trees, interaction.depth = gbmfit$bestTune$interaction.depth,
-                     shrinkage = gbmfit$bestTune$shrinkage, n.minobsinnode = gbmfit$bestTune$n.minobsinnode)   
+  gbm_fit <- gbm.fit(x = dat_train1, y = label_train, n.trees = gbmfit$bestTune$n.trees, interaction.depth = gbmfit$bestTune$interaction.depth,
+                     shrinkage = gbmfit$bestTune$shrinkage, n.minobsinnode = gbmfit$bestTune$n.minobsinnode, distribution = 'bernoulli')   
+  print('gbm for rgb done')
   
-  
-    ############ GBM
-  gbmGrid2 <- expand.grid(interaction.depth = (3:5) * 2,n.trees = (8:10)*25,shrinkage = .1,
-                         n.minobsinnode = 10)
+  ############ GBM
+  gbmGrid2 <- expand.grid(interaction.depth = (3:5)*2 ,n.trees = (8:10)*25,shrinkage = .1,
+                          n.minobsinnode = 10)
   gbmcontrol2 <- trainControl(method = 'cv', number = 5)
-  gbmfit2 <- caret::train(dat_train2, as.numeric(label_train)-1,
-                         method = "gbm", trControl = gbmcontrol2, verbose = FALSE,
-                         bag.fraction = 0.5, tuneGrid = gbmGrid2)
-  gbm_fit2 <- gbm.fit(x = dat_train2, y = as.numeric(label_train)-1, n.trees = gbmfit3$bestTune$n.trees, interaction.depth = gbmfit3$bestTune$interaction.depth,
-                     shrinkage = gbmfit3$bestTune$shrinkage, n.minobsinnode = gbmfit3$bestTune$n.minobsinnode)   
+  gbmfit2 <- caret::train(dat_train2, label_train,
+                          method = "gbm", trControl = gbmcontrol2, verbose = FALSE,
+                          bag.fraction = 0.5, tuneGrid = gbmGrid2)
+  gbm_fit2 <- gbm.fit(x = dat_train2, y = label_train, n.trees = gbmfit3$bestTune$n.trees, interaction.depth = gbmfit3$bestTune$interaction.depth,
+                      shrinkage = gbmfit3$bestTune$shrinkage, n.minobsinnode = gbmfit3$bestTune$n.minobsinnode)   
+  print('gbm for sift done')
   
   
-
   return(list(fit_ada=ada.fit,fit_rf=rf.fit, #fit_svm= svm.fit, kernel= kernel,
               dat_train= dat_train1, label_train= label_train, k=knn.Tuning$k[1], fit_xgboost=xg.fit,
               fit_gbm = gbm_fit, fit_baseline= gbm_fit2))
 }
-
-
-
