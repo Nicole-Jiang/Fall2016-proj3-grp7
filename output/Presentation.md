@@ -25,7 +25,7 @@ The accuracy rate is 73.7%.
 
 The new features are RGB features. 
 The methods:
-  + Take in every image and extract the R,G,B colors of every image
+  + Import every image and extract the R,G,B colors of every image
   + Map every Red, Blue or Green color to the nearest color
   + Create a frequency map of every color combination of each pixel (In our case, we took 800 combinations)
   + Use the frequency for one combination as one feature. Hence, we have 800 features for a single image
@@ -62,4 +62,4 @@ Use multiple learning algorithms to obtain better predictive performance than co
   + Reduce the variance and become more stable when apply to the new test set
   + Avoid overfitting
 
-5-folder cross validation accuracy rate is: % (The accuracy for the gbm model is 73.7%. Improved by %.)
+The accuracy rate is: % (The accuracy for the gbm model is 73.7%. Improved by %.)
