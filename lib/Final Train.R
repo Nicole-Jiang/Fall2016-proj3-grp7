@@ -13,8 +13,8 @@ label= as.factor(c(rep(0,1000),rep(1,1000)))
 label_train=label[index]
 
 train <- function(dat_train, label_train, par=NULL){
-  dat_train1= dat_train[,1:800]
-  dat_train2= dat_train[,801:5800]
+  dat_train1= dat_train[,1:512]
+  dat_train2= dat_train[,513:5512]
   ### Train a Gradient Boosting Model (GBM) using processed features from training images
   
   ### Input: 
