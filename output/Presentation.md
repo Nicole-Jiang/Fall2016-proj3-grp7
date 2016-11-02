@@ -14,7 +14,7 @@ For every models, we used 5-folder cross validation and set the seed, to ensure 
 
 The baseline model is using gradient boosting machine (gbm) with decision stumps on 5000 SIFT features. We tuned the interaction.depth and n.trees. (n.tree= 250, interaction.depth =10).
 
-The accuracy rate is 73.7%. 
+The accuracy rate is 73.25%. 
 
 ![image](https://github.com/TZstatsADS/Fall2016-proj3-grp7/blob/master/figs/Pre%2001.png)
 
@@ -30,7 +30,7 @@ The methods:
   + Create a frequency map of every color combination of each pixel (In our case, we took 800 combinations)
   + Use the frequency for one combination as one feature. Hence, we have 800 features for a single image
 
-Apply new features to the gbm model, we got the accuracy rate: 87.3% (The accuracy for the baseline model is 73.7%. Improved by 13.6%.)
+Apply new features to the gbm model, we got the accuracy rate: 87.3% (The accuracy for the baseline model is 73.25%. Improved by 14.05%.)
 
 
 ### 3. Introduce new models
@@ -55,7 +55,7 @@ Use ensemble learning method to obtain better predictive performance than that f
   + Reduce the variance and become more stable when apply to the new test set
   + Avoid overfitting
 
-The accuracy rate is: 90% (The accuracy for the gbm model is 87.3%. Improved by 2.7%.)
+The accuracy rate is: 91.25% (The accuracy for the gbm model is 87.3%. Improved by 3.95%.)
 
 ## 4. Business insights
 
