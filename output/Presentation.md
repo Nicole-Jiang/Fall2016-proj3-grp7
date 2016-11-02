@@ -43,11 +43,11 @@ Model | Adaboost  | Random forest | Knn | Xgboost |GBM
 **Accuracy rate** | 92.75%  | 92.1% |  80.6% |  92.2% | 87.3% 
 
 ### 3.2 Ensemble methods
-Use multiple learning algorithms to obtain better predictive performance than could be obtained from any of the constituent learning algorithms alone. 
+Use ensemble learning method to obtain better predictive performance than that from any of the single learning algorithm alone. 
 
 + Details
-	+ Apply different models (Adaboost, Random forest, Knn, xgboost and Neuro network) and tune the parameters
-	+ Use those parameters to predict the test set
+	+ Apply different models (Adaboost, Random forest, Knn, xgboost and GBM) and tune the parameters
+	+ Use those models to predict the test results
 	+ Take a simple majority vote of their predictions as the final prediction
 
 + Advantages:
@@ -55,4 +55,8 @@ Use multiple learning algorithms to obtain better predictive performance than co
   + Reduce the variance and become more stable when apply to the new test set
   + Avoid overfitting
 
-The accuracy rate is: % (The accuracy for the gbm model is 73.7%. Improved by %.)
+The accuracy rate is: 90% (The accuracy for the gbm model is 87.3%. Improved by 2.7%.)
+
+## 4. Business insights
+
+We focused not only on the accuracy rate, but also on the reproducibility, stability and processing time. Our feature extracting precess takes about 30min. And our ensemble model takes 10min and the baseline model takes 30min. As we can see, if you want to only use RGB features and ensemble model, it takes you only 40min in total.
