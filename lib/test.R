@@ -25,7 +25,7 @@ test <- function(train, data.test){
     library(e1071)
     library(class)
     
-    baseline.predict <- predict(train$fit_baseline, data.test[,513:5512], n.trees = 250)
+    baseline.predict <- predict(train$fit_baseline, data.test[,513:5512], n.trees = train$fit_baseline$n.trees)
     baseline.predict <- as.numeric(baseline.predict > mean(baseline.predict))
     
     predict_results = vector()
@@ -52,7 +52,7 @@ test <- function(train, data.test){
     #predict_results[5] <- mean(data.test$filelabel == xg.pred)
     
     ##gbm
-    gbm.pred <- predict(train$fit_gbm, data.test[,1:512], n.trees = 200)
+    gbm.pred <- predict(train$fit_gbm, data.test[,1:512], n.trees = train$fit_gbm$n.trees)
     gbm.pred <- as.numeric(gbm.pred > mean(gbm.pred))
     
     ##majority vote
@@ -64,6 +64,6 @@ test <- function(train, data.test){
                          xg=xg.pred,
                          gbm = gbm.pred)
     
-    best_model_test= as.numeric(rowMeans(results)>0.5)
-    return(data.frame(baseline.predict, best_model_test))  
+    best.model.predict= as.numeric(rowMeans(results)>0.5)
+    return(data.frame(baseline.predict, best.model.predict))  
 }
