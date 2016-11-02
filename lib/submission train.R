@@ -134,7 +134,7 @@ train <- function(dat_train, label_train, par=NULL){
   gbmGrid <- expand.grid(interaction.depth = (1:5) * 2,n.trees = (1:10)*25,shrinkage = .1,
                        n.minobsinnode = 10)
   gbmcontrol <- trainControl(method = 'cv', number = 5)
-  gbmfit <- train(dat_train, label_train,
+  gbmfit <- caret::train(dat_train, label_train,
                 method = "gbm", trControl = gbmcontrol, verbose = FALSE,
                 bag.fraction = 0.5, tuneGrid = gbmGrid)
   gbm_fit <- gbm.fit(x = dat_train, y = label_train, n.trees = gbmfit$bestTune$n.trees, interaction.depth = gbmfit$bestTune$interaction.depth,
