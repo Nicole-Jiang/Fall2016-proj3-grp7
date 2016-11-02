@@ -26,9 +26,9 @@ feature <- function(img_dir, img_name){
   n_files <- length(list.files(img_dir))
   
   ### RGB feature extraction prep 
-  nR <- 10
+  nR <- 8 
   nG <- 8
-  nB <- 10 # Caution: the bins should be consistent across all images!
+  nB <- 8 # Caution: the bins should be consistent across all images!
   rBin <- seq(0, 1, length.out=nR)
   gBin <- seq(0, 1, length.out=nG)
   bBin <- seq(0, 1, length.out=nB)
@@ -44,7 +44,7 @@ feature <- function(img_dir, img_name){
   }
   
   ### Rename features
-  colnames(rgb_feature) <- paste0("RGB",1:800)
+  colnames(rgb_feature) <- paste0("RGB",1:512)
   
   ### Conbine RGB features with SIFT features into final features
   sift_features <- read.csv(paste0(img_dir,"/sift_features.csv"))
@@ -54,3 +54,7 @@ feature <- function(img_dir, img_name){
   save(Feature_eval, file=paste0(img_dir,"/Feature_eval.RData"))
   return(Feature_eval)
 }
+
+
+
+
