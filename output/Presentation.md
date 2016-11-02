@@ -8,7 +8,7 @@
 	+ Skanda Vish(sv4281)
 + Project summary: In this project, we created a classification engine for images of poodles versus images of fried chickens. 
 
-### 1. Baseline model
+## 1. Baseline model
 
 For every models, we used 5-folder cross validation and set the seed, to ensure the reprocudibility.
 
@@ -19,7 +19,7 @@ The accuracy rate is 73.7%.
 ![image](https://github.com/TZstatsADS/Fall2016-proj3-grp7/blob/master/figs/Pre%2001.png)
 
 
-### 2. Introduce new features
+## 2. Introduce new features
 
 ![image](https://github.com/TZstatsADS/Fall2016-proj3-grp7/blob/master/figs/Pre%2002.png)
 
@@ -36,13 +36,13 @@ Apply new features to the gbm model, we got the accuracy rate: 87.3% (The accura
 ### 3. Introduce new models
 ![image](https://github.com/TZstatsADS/Fall2016-proj3-grp7/blob/master/figs/Pre%2003.png)
 
-#### 3.1 Singel models
+### 3.1 Singel models
 
 Adaboost  | Random forest | Knn model | Xgboost model |GBM
 ----------|--------------| -------------| -----------| ---
 92.75%  | 92.1% |80.6% |92.2% | 87.3 
 
-#### 3.5 Ensemble methods
+### 3.2 Ensemble methods
 Use multiple learning algorithms to obtain better predictive performance than could be obtained from any of the constituent learning algorithms alone. 
 
 + Details
