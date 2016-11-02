@@ -7,11 +7,11 @@ data.all= as.data.frame(rgb_feature)
 #label_train= data.all[index,801]
 #data.test= data.all[-index,]
 #########################
-index=sample(2000,1600)
-data.evl_train=Feature_eval[index,]
+#index=sample(2000,1600)
+#data.evl_train=Feature_eval[index,]
 label= c(rep(1,1000),rep(0,1000)) #when reproducing, labels should be of numeric type (not character or factor)
 #1 for fried chicken and 0 for dog!!!!!!
-label_train=label[index]
+#label_train=label[index]
 
 train <- function(dat_train, label_train, par=NULL){
   dat_train1= dat_train[,1:512]
