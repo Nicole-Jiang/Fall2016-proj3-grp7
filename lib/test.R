@@ -17,7 +17,6 @@ test <- function(train, data.test){
   ### load libraries
   library(data.table)
   library(EBImage)
-  library(dplyr)
   library(xgboost)
   library(MASS)
   library(ada)
@@ -27,19 +26,18 @@ test <- function(train, data.test){
   library(e1071)
   library(pROC)
   library(class)
-  library(neuralnet)
   
-  baseline.predict <- predict(train$fit_baseline, data.test[,801:5800], n.trees = 250)
+  baseline.predict <- predict(train$fit_baseline, data.test[,513:5512], n.trees = 250)
   baseline.predict <- as.numeric(baseline.predict > mean(baseline.predict))
   
   predict_results = vector()
   
   ##ada
-  ada.predict <- predict(train$fit_ada,newdata=data.test[,1:800],type="vector")
+  ada.predict <- predict(train$fit_ada,newdata=data.test[,1:512],type="vector")
   #predict_results[1]= mean(data.test$filelabel==ada.predict)
   
   ##randeom forest
-  rf.predict <- predict(train$fit_rf, newdata=data.test[,1:800],n.trees= 600)
+  rf.predict <- predict(train$fit_rf, newdata=data.test[,1:512],n.trees= 600)
   #predict_results[2]= mean(data.test$filelabel==rf.predict)
   
   ##svm
@@ -47,24 +45,24 @@ test <- function(train, data.test){
   #predict_results[3]=mean(data.test$filelabel==svm.pred)
   
   ##knn
-  knn.pred= knn(train$dat_train, data.test[,1:800], cl= train$label_train, k = train$k)
+  knn.pred= knn(train$dat_train, data.test[,1:512], cl= train$label_train, k = train$k)
   #predict_results[4]=mean(data.test$filelabel==knn.pred)
   
   ##xgboost
-  xg.pred <- predict(train$fit_xgboost, as.matrix(data.test[,1:800]))
+  xg.pred <- predict(train$fit_xgboost, as.matrix(data.test[,1:512]))
   xg.pred <- as.numeric(xg.pred > mean(xg.pred))
   #predict_results[5] <- mean(data.test$filelabel == xg.pred)
   
   ##gbm
-  gbm.pred <- predict(fit_gbm, data.test[,1:800])
+  gbm.pred <- predict(fit_gbm, data.test[,1:512])
   gbm.pred <- as.numeric(gbm.pred > mean(gbm.pred))
     
   ##majority vote
-  results = data.frame(ada=as.numeric(ada.predict)-1, 
+  results = data.frame(ada=ada.predict, 
                        #gbm=gbm.predict,
-                       rf= as.numeric(rf.predict)-1,
+                       rf= rf.predict,
                        #svm=as.numeric(svm.pred)-1,
-                       knn=as.numeric(knn.pred)-1,
+                       knn=knn.pred,
                        xg=xg.pred,
                       gbm = gbm.pred)
     
