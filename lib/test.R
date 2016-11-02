@@ -53,7 +53,7 @@ test <- function(train, data.test){
   xg.pred <- as.numeric(xg.pred > mean(xg.pred))
   #predict_results[5] <- mean(data.test$filelabel == xg.pred)
   
-  ##neural network
+  ##gbm
   gbm.pred <- predict(fit_gbm, data.test)
   gbm.pred <- as.numeric(gbm.pred > mean(gbm.pred))
     
