@@ -13,7 +13,9 @@
 #1 for fried chicken and 0 for dog!!!!!!
 #label_train=label[index]
 
-train <- function(dat_train, label_train, par=NULL){ #the labels should be in numeric type (not character or factor!!!)
+train <- function(dat_train, label_train, par=NULL){ 
+  #dat_train is a dataframe which the first 512 columns are the rgb features extracted by ourselves, the rest 5000 columns are the SIFT features
+  #label_train must be 0 and 1 in numeric type (not character or factor!!!)
   dat_train1= dat_train[,1:512]
   dat_train2= dat_train[,513:5512]
   ### Train a Gradient Boosting Model (GBM) using processed features from training images
