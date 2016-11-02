@@ -13,7 +13,7 @@ label= c(rep(1,1000),rep(0,1000)) #when reproducing, labels should be of numeric
 #1 for fried chicken and 0 for dog!!!!!!
 #label_train=label[index]
 
-train <- function(dat_train, label_train, par=NULL){
+train <- function(dat_train, label_train, par=NULL){ #the labels should be in numeric type (not character or factor!!!)
   dat_train1= dat_train[,1:512]
   dat_train2= dat_train[,513:5512]
   ### Train a Gradient Boosting Model (GBM) using processed features from training images
