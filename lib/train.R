@@ -111,25 +111,18 @@ train <- function(dat_train, label_train, par=NULL){
                      shrinkage = gbmfit$bestTune$shrinkage, n.minobsinnode = gbmfit$bestTune$n.minobsinnode, distribution = 'bernoulli')   
   
   
-  ###########This is the baseline GBM, we use the same method of tuning parameters as above
-  gbmGrid2 <- expand.grid(interaction.depth = (3:5)*2 ,n.trees = (8:10)*25,shrinkage = .1,
-                          n.minobsinnode = 10)
-  gbmcontrol2 <- trainControl(method = 'cv', number = 5)
-  gbmfit2 <- caret::train(dat_train2, label_train,
-                          method = "gbm", trControl = gbmcontrol2, verbose = FALSE,
-                          bag.fraction = 0.5, tuneGrid = gbmGrid2)
-  gbm_fit2 <- gbm.fit(x = dat_train2, y = label_train,
-                      n.trees = gbmfit2$bestTune$n.trees,
-                      interaction.depth = gbmfit2$bestTune$interaction.depth,
-                      shrinkage = gbmfit2$bestTune$shrinkage,
-                      n.minobsinnode = gbmfit2$bestTune$n.minobsinnode,
-                      distribution = 'bernoulli')
-
-  ####the tuning takes a while to run, we find out the best n.trees = 250 and best depth = 6
-  # gbm_fit2 <- gbm.fit(x = dat_train2, y = label_train, n.trees = 250,
-  #                     interaction.depth = 6,
-  #                     shrinkage = 0.1,
-  #                     n.minobsinnode = 10)
+  ###########This is the baseline GBM, we use the default parameter values
+  #gbmGrid2 <- expand.grid(interaction.depth = (3:5)*2 ,n.trees = (8:10)*25,shrinkage = .1,
+  #                        n.minobsinnode = 10)
+  #gbmcontrol2 <- trainControl(method = 'cv', number = 5)
+  #gbmfit2 <- caret::train(dat_train2, label_train,
+  #                        method = "gbm", trControl = gbmcontrol2, verbose = FALSE,
+  #                        bag.fraction = 0.5, tuneGrid = gbmGrid2)
+  gbm_fit2 <- gbm.fit(x = dat_train2, y = label_train, distribution = 'bernoulli')
+                      #n.trees = gbmfit2$bestTune$n.trees,
+                      #interaction.depth = gbmfit2$bestTune$interaction.depth,
+                      #shrinkage = gbmfit2$bestTune$shrinkage,
+                      #n.minobsinnode = gbmfit2$bestTune$n.minobsinnode,
   
   return(list(fit_ada=ada.fit,fit_rf=rf.fit, #fit_svm= svm.fit, kernel= kernel,
               dat_train= dat_train1, label_train= label_train, k=knn.Tuning$k[1], fit_xgboost=xg.fit,
