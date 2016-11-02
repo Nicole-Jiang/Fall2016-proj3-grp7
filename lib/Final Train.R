@@ -9,7 +9,8 @@ data.all= as.data.frame(rgb_feature)
 #########################
 index=sample(2000,1600)
 data.evl_train=Feature_eval[index,]
-label= c(rep(0,1000),rep(1,1000)) #when reproducing, labels should be of numeric type (not character or factor)
+label= c(rep(1,1000),rep(0,1000)) #when reproducing, labels should be of numeric type (not character or factor)
+#1 for fried chicken and 0 for dog!!!!!!
 label_train=label[index]
 
 train <- function(dat_train, label_train, par=NULL){
