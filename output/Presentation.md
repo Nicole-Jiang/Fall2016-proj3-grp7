@@ -25,6 +25,7 @@ The accuracy rate is 73.25%.
 
 The new features are RGB features. 
 ![image](https://github.com/TZstatsADS/Fall2016-proj3-grp7/blob/master/figs/RGB%20demo.png)
+
 The methods:
   + Import every image and extract the R,G,B colors of every image
   + Map every Red, Blue or Green color to the nearest color
