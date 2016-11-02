@@ -95,10 +95,10 @@ train <- function(dat_train, label_train, par=NULL){
   gbmGrid <- expand.grid(interaction.depth = (3:5) * 2,n.trees = (8:10)*25,shrinkage = .1,
                          n.minobsinnode = 10)
   gbmcontrol <- trainControl(method = 'cv', number = 5)
-  gbmfit <- caret::train(dat_train1, label_train,
+  gbmfit <- caret::train(dat_train1, as.numeric(label_train)-1,
                          method = "gbm", trControl = gbmcontrol, verbose = FALSE,
                          bag.fraction = 0.5, tuneGrid = gbmGrid)
-  gbm_fit <- gbm.fit(x = dat_train1, y = label_train, n.trees = gbmfit$bestTune$n.trees, interaction.depth = gbmfit$bestTune$interaction.depth,
+  gbm_fit <- gbm.fit(x = dat_train1, y = as.numeric(label_train)-1, n.trees = gbmfit$bestTune$n.trees, interaction.depth = gbmfit$bestTune$interaction.depth,
                      shrinkage = gbmfit$bestTune$shrinkage, n.minobsinnode = gbmfit$bestTune$n.minobsinnode)   
   
   
@@ -106,10 +106,10 @@ train <- function(dat_train, label_train, par=NULL){
   gbmGrid2 <- expand.grid(interaction.depth = (3:5) * 2,n.trees = (8:10)*25,shrinkage = .1,
                          n.minobsinnode = 10)
   gbmcontrol2 <- trainControl(method = 'cv', number = 5)
-  gbmfit2 <- caret::train(dat_train2, label_train,
+  gbmfit2 <- caret::train(dat_train2, as.numeric(label_train)-1,
                          method = "gbm", trControl = gbmcontrol2, verbose = FALSE,
                          bag.fraction = 0.5, tuneGrid = gbmGrid2)
-  gbm_fit2 <- gbm.fit(x = dat_train2, y = label_train, n.trees = gbmfit3$bestTune$n.trees, interaction.depth = gbmfit3$bestTune$interaction.depth,
+  gbm_fit2 <- gbm.fit(x = dat_train2, y = as.numeric(label_train)-1, n.trees = gbmfit3$bestTune$n.trees, interaction.depth = gbmfit3$bestTune$interaction.depth,
                      shrinkage = gbmfit3$bestTune$shrinkage, n.minobsinnode = gbmfit3$bestTune$n.minobsinnode)   
   
   
