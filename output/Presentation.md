@@ -38,9 +38,9 @@ Apply new features to the gbm model, we got the accuracy rate: 87.3% (The accura
 
 ### 3.1 Comparison of single models
 
-Model | Adaboost  | Random forest | Knn model | Xgboost model |GBM
+Model | Adaboost  | Random forest | Knn | Xgboost |GBM
 ------|----------|--------------| -------------| -----------| ---
-**Accuracy rate** | 92.75%  | 92.1% |  80.6% |  92.2% | 87.3 
+**Accuracy rate** | 92.75%  | 92.1% |  80.6% |  92.2% | 87.3% 
 
 ### 3.2 Ensemble methods
 Use multiple learning algorithms to obtain better predictive performance than could be obtained from any of the constituent learning algorithms alone. 
