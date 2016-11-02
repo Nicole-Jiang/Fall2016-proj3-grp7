@@ -92,18 +92,18 @@ train <- function(dat_train, label_train, par=NULL){
   xg.fit <- xgboost(data=dtrain, params=best_param, nrounds=nround, nthread=6)
   #######################
   #######gbm
-  gbmGrid <- expand.grid(interaction.depth = (1:5) * 2,n.trees = (1:10)*25,shrinkage = .1,
+  gbmGrid <- expand.grid(interaction.depth = (3:5) * 2,n.trees = (8:10)*25,shrinkage = .1,
                          n.minobsinnode = 10)
   gbmcontrol <- trainControl(method = 'cv', number = 5)
-  gbmfit <- caret::train(dat_train, label_train,
+  gbmfit <- caret::train(dat_train1, label_train,
                          method = "gbm", trControl = gbmcontrol, verbose = FALSE,
                          bag.fraction = 0.5, tuneGrid = gbmGrid)
-  gbm_fit <- gbm.fit(x = dat_train, y = label_train, n.trees = gbmfit$bestTune$n.trees, interaction.depth = gbmfit$bestTune$interaction.depth,
+  gbm_fit <- gbm.fit(x = dat_train1, y = label_train, n.trees = gbmfit$bestTune$n.trees, interaction.depth = gbmfit$bestTune$interaction.depth,
                      shrinkage = gbmfit$bestTune$shrinkage, n.minobsinnode = gbmfit$bestTune$n.minobsinnode)   
   
   
     ############ GBM
-  gbmGrid2 <- expand.grid(interaction.depth = (1:5) * 2,n.trees = (1:10)*25,shrinkage = .1,
+  gbmGrid2 <- expand.grid(interaction.depth = (3:5) * 2,n.trees = (8:10)*25,shrinkage = .1,
                          n.minobsinnode = 10)
   gbmcontrol2 <- trainControl(method = 'cv', number = 5)
   gbmfit2 <- caret::train(dat_train2, label_train,
