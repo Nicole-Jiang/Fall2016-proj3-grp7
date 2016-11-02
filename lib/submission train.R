@@ -2,13 +2,15 @@ data.all= as.data.frame(rgb_feature)
 names(data.all)[801]= "filelabel"
 data.all$filelabel = as.factor(data.all$filelabel)
 #data.all$filelabel=factor(data.all$filelabel,labels = c("no", "yes"))
-index= sample(2000,1600)
-dat_train= data.all[index,-801]
-label_train= data.all[index,801]
-data.test= data.all[-index,]
+#index= sample(2000,1600)
+#dat_train= data.all[index,-801]
+#label_train= data.all[index,801]
+#data.test= data.all[-index,]
 #########################
+index=sample(2000,1600)
+data.evl_train=Feature_eval[index,]
+label= data.all$filelabel[index]
 
-data.evl_train=Feature_eval[sample(2000,1600),]
 train <- function(dat_train, label_train, par=NULL){
   dat_train1= dat_train[,1:800]
   dat_train2= dat_train[,801:5800]
@@ -93,20 +95,17 @@ train <- function(dat_train, label_train, par=NULL){
                          n.minobsinnode = 10)
   gbmcontrol <- trainControl(method = 'cv', number = 5)
   gbmfit <- caret::train(dat_train, label_train,
-<<<<<<< Updated upstream
-                method = "gbm", trControl = gbmcontrol, verbose = FALSE,
-                bag.fraction = 0.5, tuneGrid = gbmGrid)
-=======
                          method = "gbm", trControl = gbmcontrol, verbose = FALSE,
                          bag.fraction = 0.5, tuneGrid = gbmGrid)
->>>>>>> Stashed changes
   gbm_fit <- gbm.fit(x = dat_train, y = label_train, n.trees = gbmfit$bestTune$n.trees, interaction.depth = gbmfit$bestTune$interaction.depth,
                      shrinkage = gbmfit$bestTune$shrinkage, n.minobsinnode = gbmfit$bestTune$n.minobsinnode)   
-  ############ GBM
+  
+  
+    ############ GBM
   gbmGrid2 <- expand.grid(interaction.depth = (1:5) * 2,n.trees = (1:10)*25,shrinkage = .1,
                          n.minobsinnode = 10)
   gbmcontrol2 <- trainControl(method = 'cv', number = 5)
-  gbmfit3 <- caret::train(dat_train2, label_train,
+  gbmfit2 <- caret::train(dat_train2, label_train,
                          method = "gbm", trControl = gbmcontrol2, verbose = FALSE,
                          bag.fraction = 0.5, tuneGrid = gbmGrid2)
   gbm_fit2 <- gbm.fit(x = dat_train2, y = label_train, n.trees = gbmfit3$bestTune$n.trees, interaction.depth = gbmfit3$bestTune$interaction.depth,
