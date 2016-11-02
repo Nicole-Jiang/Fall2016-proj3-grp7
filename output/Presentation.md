@@ -12,7 +12,7 @@
 
 For every models, we used 5-folder cross validation and set the seed, to ensure the reprocudibility.
 
-The baseline model is using gradient boosting machine (gbm) with decision stumps on 5000 SIFT features. We tuned the interaction.depth and n.trees. (n.tree= 250, interaction.depth =10).
+The baseline model is using gradient boosting machine (gbm) with decision stumps on 5000 SIFT features. We tuned the shrinkage and n.trees. (n.tree= 250, shrinkage= 0.1).
 
 The accuracy rate is 73.25%. 
 
