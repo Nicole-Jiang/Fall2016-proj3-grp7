@@ -12,7 +12,9 @@
 
 For every models, we used 5-folder cross validation and set the seed, to ensure the reprocudibility.
 
-The baseline model is using gradient boosting machine (gbm) with decision stumps on 5000 SIFT features. The accuracy rate is 73.7%. 
+The baseline model is using gradient boosting machine (gbm) with decision stumps on 5000 SIFT features. We tuned the interaction.depth and n.trees. (n.tree= 250, interaction.depth =10).
+
+The accuracy rate is 73.7%. 
 
 ![image](https://github.com/TZstatsADS/Fall2016-proj3-grp7/blob/master/figs/Pre%2001.png)
 

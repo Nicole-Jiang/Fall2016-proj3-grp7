@@ -6,9 +6,12 @@ index= sample(2000,1600)
 dat_train= data.all[index,-801]
 label_train= data.all[index,801]
 data.test= data.all[-index,]
+#########################
 
+data.evl_train=Feature_eval[sample(2000,1600),]
 train <- function(dat_train, label_train, par=NULL){
-  
+  dat_train1= dat_train[,1:800]
+  dat_train2= dat_train[,801:5800]
   ### Train a Gradient Boosting Model (GBM) using processed features from training images
   
   ### Input: 
@@ -24,68 +27,24 @@ train <- function(dat_train, label_train, par=NULL){
   library(xgboost)
   library(caret)
   ###########################   Ada boost model
-  ada.fit= ada(label_train~.,data=dat_train,type="discrete")
+  ada.fit= ada(label_train~.,data=dat_train1,type="discrete")
   
   ########################## Tune random forest model
   # Tune parameter 'mtry'
   set.seed(1234)
-  bestmtry <- tuneRF(y=label_train, x=dat_train, stepFactor=1.5, improve=1e-5, ntree=600)
+  bestmtry <- tuneRF(y=label_train, x=dat_train1, stepFactor=1.5, improve=1e-5, ntree=600)
   best.mtry <- bestmtry[,1][which.min(bestmtry[,2])]
   
   ########################### Get random forest model
-  rf.fit=randomForest(label_train~., dat_train, mtry=best.mtry, ntree=600, importance=T)
-  ###########################  Tune svm 
-  #cross validation for kernels
-  #index= sample(rep(1:5,nrow(dat_train)/5))
-  #error.radial=vector()
-  #error.linear=vector()
-  #error.poly=vector()
-  
-  #for(i in 1:5){
-    #trainingset=data.train[index != i,]
-    #testset=data.train[index==i,]
-    #names(trainingset)[ncol(data.train)]="label_train"
-    #names(testset)[ncol(data.train)]= "label_train"
-    #trainingset=dat_train[index != i,]
-    #testset=dat_train[index==i,]
-    #trainingset$label_train= label_train[index != i]
-    #testset$label_train= label_train[index==i]
-    
-    #trainingset$label_train= factor(as.numeric(trainingset$label_train)-1)
-    #testset$label_train=factor(as.numeric(trainingset$label_train)-1)
-    
-    
-    #svm.fit.radial=svm(label_train~.,data=trainingset,kernel="radial")
-    #svm.fit.linear=svm(label_train~.,data=trainingset,kernel="linear")
-    #svm.fit.poly=svm(label_train~.,data=trainingset,kernel="polynomial")
-    
-    #svm.pred.radial=predict(svm.fit.radial,newdata=testset)
-    #svm.pred.linear=predict(svm.fit.linear,newdata=testset)
-    #svm.pred.poly=predict(svm.fit.poly,newdata=testset)
-    
-    #err.radial=mean(svm.pred.radial!=testset$label_train)
-    #err.linear=mean(svm.pred.linear!=testset$label_train)
-    #err.poly=mean(svm.pred.poly!=testset$label_train)
-    
-    #error.radial=c(error.radial,err.radial)
-    #error.linear=c(error.linear,err.linear)
-    #error.poly=c(error.poly,err.poly)
-  #}
-  
-  #result.matrix=matrix(nrow=3,ncol=1,c(mean(error.radial),mean(error.linear),mean(error.poly)))
-  #rownames(result.matrix)=c("radial","linear","polynomial")
-  #index=which.min(result.matrix)
-  #kernel= names(result.matrix[index,])
-  
-  
+  rf.fit=randomForest(label_train~., dat_train1, mtry=best.mtry, ntree=600, importance=T)
   ###########################   Tune Knn model
   knn.Tuning<-data.frame(k=1:10,cvError=rep(NA,10))
   for(i in 1:nrow(knn.Tuning)){
-    index= sample(rep(1:5,nrow(dat_train)/5))
+    index= sample(rep(1:5,nrow(dat_train1)/5))
     cvError.temp=0
     for(j in 1:5){
-      data.train= dat_train[index != j,]
-      data.test= dat_train[index==j,]
+      data.train= dat_train1[index != j,]
+      data.test= dat_train1[index==j,]
       knn.temp= knn(data.train, data.test, cl=label_train[index != j] , k = knn.Tuning$k[i])
       cvError.temp=cvError.temp+(1- mean(label_train[index == j]==knn.temp))/5
     }
@@ -94,7 +53,7 @@ train <- function(dat_train, label_train, par=NULL){
   ###########################   Get k for Knn model
   knn.Tuning<-knn.Tuning[order(knn.Tuning$cvError),]
   ###########################   Tune XG boost
-  dtrain <- xgb.DMatrix(as.matrix(dat_train),label = as.numeric(label_train)-1)
+  dtrain <- xgb.DMatrix(as.matrix(dat_train1),label = as.numeric(label_train)-1)
   best_param = list()
   best_seednumber = 1234
   best_logloss = Inf
@@ -129,18 +88,36 @@ train <- function(dat_train, label_train, par=NULL){
   set.seed(best_seednumber)
   xg.fit <- xgboost(data=dtrain, params=best_param, nrounds=nround, nthread=6)
   #######################
-  
   #######gbm
   gbmGrid <- expand.grid(interaction.depth = (1:5) * 2,n.trees = (1:10)*25,shrinkage = .1,
-                       n.minobsinnode = 10)
+                         n.minobsinnode = 10)
   gbmcontrol <- trainControl(method = 'cv', number = 5)
   gbmfit <- caret::train(dat_train, label_train,
+<<<<<<< Updated upstream
                 method = "gbm", trControl = gbmcontrol, verbose = FALSE,
                 bag.fraction = 0.5, tuneGrid = gbmGrid)
+=======
+                         method = "gbm", trControl = gbmcontrol, verbose = FALSE,
+                         bag.fraction = 0.5, tuneGrid = gbmGrid)
+>>>>>>> Stashed changes
   gbm_fit <- gbm.fit(x = dat_train, y = label_train, n.trees = gbmfit$bestTune$n.trees, interaction.depth = gbmfit$bestTune$interaction.depth,
                      shrinkage = gbmfit$bestTune$shrinkage, n.minobsinnode = gbmfit$bestTune$n.minobsinnode)   
+  ############ GBM
+  gbmGrid2 <- expand.grid(interaction.depth = (1:5) * 2,n.trees = (1:10)*25,shrinkage = .1,
+                         n.minobsinnode = 10)
+  gbmcontrol2 <- trainControl(method = 'cv', number = 5)
+  gbmfit3 <- caret::train(dat_train2, label_train,
+                         method = "gbm", trControl = gbmcontrol2, verbose = FALSE,
+                         bag.fraction = 0.5, tuneGrid = gbmGrid2)
+  gbm_fit2 <- gbm.fit(x = dat_train2, y = label_train, n.trees = gbmfit3$bestTune$n.trees, interaction.depth = gbmfit3$bestTune$interaction.depth,
+                     shrinkage = gbmfit3$bestTune$shrinkage, n.minobsinnode = gbmfit3$bestTune$n.minobsinnode)   
   
+  
+
   return(list(fit_ada=ada.fit,fit_rf=rf.fit, #fit_svm= svm.fit, kernel= kernel,
-              dat_train= dat_train, label_train= label_train, k=tree.Tuning$k[1], fit_xgboost=xg.fit,
-             fit_gbm = gbm_fit))
+              dat_train= dat_train1, label_train= label_train, k=tree.Tuning$k[1], fit_xgboost=xg.fit,
+              fit_gbm = gbm_fit, fit_baseline= gbm_fit2))
 }
+
+
+
