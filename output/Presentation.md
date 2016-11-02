@@ -60,12 +60,17 @@ The accuracy rate is: 90% (The accuracy for the gbm model is 87.3%. Improved by 
 ## 4. Business insights
 
 We focused not only on the accuracy rate, but also on the reproducibility, stability and processing time. 
+
 The feature extracting process takes about 30min, the ensemble model takes 10min and the test process takes about 10s. As we can see, if you want to only use RGB features and ensemble model, it takes you only 40min to train the model and 10s to use the model. 
+
 Hence if we launch our model as a product, we could take update it on a daily basis which would take about 1 hour thus improving accuracy greatly. 
 
 ## 5. Future Improvements
 Our model can be improved by doing the following:
+
 1. Use established libraries like OpenCV and patented algorithms like SURF to improve the quality of features extratcted.
+
 2. Improve the model itself by using sophisticated and modern algorithms like convolutional Neural Networks.
+
 3. Reduce computation time by using distributed computing. 
 
