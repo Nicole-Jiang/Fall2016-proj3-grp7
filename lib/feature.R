@@ -23,7 +23,7 @@ feature <- function(img_dir, img_name){
   library("EBImage")
   
   ### Count number of images
-  n_files <- length(list.files(img_dir))
+  n_files <- length(list.files(paste0(img_dir,"/TestImages")))
   
   ### RGB feature extraction prep 
   nR <- 8 
@@ -53,6 +53,8 @@ feature <- function(img_dir, img_name){
   ### output constructed features
   save(Feature_eval, file=paste0(img_dir,"/Feature_eval.RData"))
   return(Feature_eval)
+
+
 }
 
 
