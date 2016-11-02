@@ -59,4 +59,6 @@ The accuracy rate is: 90% (The accuracy for the gbm model is 87.3%. Improved by 
 
 ## 4. Business insights
 
-We focused not only on the accuracy rate, but also on the reproducibility, stability and processing time. Our feature extracting precess takes about 30min. And our ensemble model takes 10min and the baseline model takes 30min. As we can see, if you want to only use RGB features and ensemble model, it takes you only 40min in total.
+We focused not only on the accuracy rate, but also on the reproducibility, stability and processing time. 
+The feature extracting process takes about 30min, the ensemble model takes 10min and the test process takes about 10s. As we can see, if you want to only use RGB features and ensemble model, it takes you only 40min to train the model and 10s to use the model. 
+Hence if we launch our model as a product, we could take update it on a daily basis which would take about 1 hour thus improving accuracy greatly. 
