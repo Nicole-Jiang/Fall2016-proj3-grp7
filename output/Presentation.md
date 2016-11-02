@@ -64,8 +64,12 @@ The feature extracting process takes about 30min, the ensemble model takes 10min
 Hence if we launch our model as a product, we could take update it on a daily basis which would take about 1 hour thus improving accuracy greatly. 
 
 ## 5. Future Improvements
+<<<<<<< Updated upstream
 Our model can be improved by doing the following:
 1. Use established libraries like OpenCV and patented algorithms like SURF to improve the quality of features extratcted.
 2. Improve the model itself by using sophisticated and modern algorithms like convolutional Neural Networks.
 3. Reduce computation time by using distributed computing. 
 
+=======
+Our model can be improved by doing the following: 1. Use established libraries like OpenCV and patented algorithms like SURF to improve the quality of features extratcted. 2. Improve the model itself by using sophisticated and modern algorithms like convolutional Neural Networks. 3. Reduce computation time by using distributed computing.
+>>>>>>> Stashed changes
