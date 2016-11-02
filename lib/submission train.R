@@ -114,7 +114,7 @@ train <- function(dat_train, label_train, par=NULL){
   
 
   return(list(fit_ada=ada.fit,fit_rf=rf.fit, #fit_svm= svm.fit, kernel= kernel,
-              dat_train= dat_train1, label_train= label_train, k=tree.Tuning$k[1], fit_xgboost=xg.fit,
+              dat_train= dat_train1, label_train= label_train, k=knn.Tuning$k[1], fit_xgboost=xg.fit,
               fit_gbm = gbm_fit, fit_baseline= gbm_fit2))
 }
 
