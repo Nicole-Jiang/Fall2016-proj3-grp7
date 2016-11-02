@@ -29,6 +29,8 @@ test <- function(train, data.test){
   library(class)
   library(neuralnet)
   
+  baseline.predict <- predict(train$fit_baseline, data.test[,801:5800], n.trees = 250)
+  baseline.predict <- as.numeric(baseline.predict > mean(baseline.predict))
   
   predict_results = vector()
   
@@ -65,9 +67,8 @@ test <- function(train, data.test){
                        knn=as.numeric(knn.pred)-1,
                        xg=xg.pred,
                       gbm = gbm.pred)
-  
-  test= as.numeric(rowMeans(results)>0.5)
-  return(test)
-  
+    
+  best_model_test= as.numeric(rowMeans(results)>0.5)
+  return(data.frame(baseline.predict, best_model_test))  
 }
 
