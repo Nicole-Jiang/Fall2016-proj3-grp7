@@ -3,8 +3,8 @@
 ### Author: Jiayu Wang
 ######################################################
 
-data.test= data.all[-index,-801]
-train=result
+#data.test= data.all[-index,-801]
+#train=result
 test <- function(train, data.test){
   
   ### Fit the classfication model with testing data
@@ -33,11 +33,11 @@ test <- function(train, data.test){
   predict_results = vector()
   
   ##ada
-  ada.predict <- predict(train$fit_ada,newdata=data.test,type="vector")
+  ada.predict <- predict(train$fit_ada,newdata=data.test[,1:800],type="vector")
   #predict_results[1]= mean(data.test$filelabel==ada.predict)
   
   ##randeom forest
-  rf.predict <- predict(train$fit_rf, newdata=data.test,n.trees= 600)
+  rf.predict <- predict(train$fit_rf, newdata=data.test[,1:800],n.trees= 600)
   #predict_results[2]= mean(data.test$filelabel==rf.predict)
   
   ##svm
@@ -45,16 +45,16 @@ test <- function(train, data.test){
   #predict_results[3]=mean(data.test$filelabel==svm.pred)
   
   ##knn
-  knn.pred= knn(train$dat_train, data.test, cl= train$label_train, k = train$k)
+  knn.pred= knn(train$dat_train, data.test[,1:800], cl= train$label_train, k = train$k)
   #predict_results[4]=mean(data.test$filelabel==knn.pred)
   
   ##xgboost
-  xg.pred <- predict(train$fit_xgboost, as.matrix(data.test))
+  xg.pred <- predict(train$fit_xgboost, as.matrix(data.test[,1:800]))
   xg.pred <- as.numeric(xg.pred > mean(xg.pred))
   #predict_results[5] <- mean(data.test$filelabel == xg.pred)
   
   ##gbm
-  gbm.pred <- predict(fit_gbm, data.test)
+  gbm.pred <- predict(fit_gbm, data.test[,1:800])
   gbm.pred <- as.numeric(gbm.pred > mean(gbm.pred))
     
   ##majority vote
