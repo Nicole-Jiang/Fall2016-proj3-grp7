@@ -54,7 +54,7 @@ test <- function(train, data.test){
   #predict_results[5] <- mean(data.test$filelabel == xg.pred)
   
   ##gbm
-  gbm.pred <- predict(fit_gbm, data.test[,1:512])
+  gbm.pred <- predict(fit_gbm, data.test[,1:512], n.trees = 200)
   gbm.pred <- as.numeric(gbm.pred > mean(gbm.pred))
     
   ##majority vote
