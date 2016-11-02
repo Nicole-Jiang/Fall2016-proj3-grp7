@@ -12,7 +12,7 @@ if(!require(EBImage)){
   library(EBImage)
 }
 
-feature <- function(img_dir, img_name, data_name=NULL){
+feature <- function(img_dir, img_name){
   
   ### Construct RGB features for training/testing images
 
@@ -46,9 +46,11 @@ feature <- function(img_dir, img_name, data_name=NULL){
   ### Rename features
   colnames(rgb_feature) <- paste0("RGB",1:800)
   
+  ### Conbine RGB features with SIFT features into final features
+  sift_features <- read.csv("~/Google Drive/Columbia/5243 ADS/Project 3/Project3_poodleKFC_train/sift_features.csv")
+  Feature_eval <- as.data.frame(cbind(rgb_feature, t(sift_features)))
+  
   ### output constructed features
-  if(!is.null(data_name)){
-    save(rgb_feature, file=paste0("./output/feature_", data_name, ".RData"))
-  }
-  return(rgb_feature)
+  save(Feature_eval, file="./output/Feature_eval.RData")
+  return(Feature_eval)
 }
