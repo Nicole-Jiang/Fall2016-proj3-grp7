@@ -1,6 +1,6 @@
 # Project: Predictive Analytics - Labradoodle or Fried Chicken? 
 ![image](https://s-media-cache-ak0.pinimg.com/236x/6b/01/3c/6b013cd759c69d17ffd1b67b3c1fbbbf.jpg)
-### [Full Project Description](ADS_Teaching/Fall2016_Projects/Project3_PoodleKFC/doc/project3_desc.md)
+### [Full Project Description](https://github.com/TZstatsADS/ADS_Teaching/blob/master/Fall2016_Projects/Project3_PoodleKFC/doc/project3_desc.md)
 
 Term: Fall 2016
 
@@ -11,7 +11,7 @@ Term: Fall 2016
 	+ team member 3 Skanda Vish (sv4281)
 	+ team member 4 Jiayu Wang (jw3323)
 	+ team member 5 Wanyi Zhang (wz2323)
-+ Project summary: In this project, we try to propose a feasible improvement on the currant classification engine to classify poodle dogs and fried chickenInd in terms of running cost (storage, memory and time) and prediction accuracy. The baseline model is gradient boosting machine (gbm) with decision stumps using 5000 SIFT features. Our proposed advanced model is using ensemble method (majority vote) of adaboost, random forest, knn, xgboost, and gbm on combination of 800 RGB features and original 5000 SIFT features, which enhances the accuracy rate by 21%.
++ Project summary: In this project, we try to propose a feasible improvement on the currant classification engine to classify poodle dogs and fried chicken in terms of running cost (storage, memory and time) and prediction accuracy. The baseline model uses gradient boosting machine (gbm) with decision stumps on 5000 SIFT features. Our advanced model uses ensemble method (majority vote) of adaboost, random forest, knn, xgboost, and gbm on combination of 521 RGB features and original 5000 SIFT features, which enhances the accuracy rate by 21%.
 	+ Image processing and features extraction
 	+ Classification methods
 	+ Model evaluation and comparison
